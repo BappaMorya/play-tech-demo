@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/play-tech-demo -Dhttp.port=${PORT} -Dconfig.file=conf/prod.conf
+web: target/universal/stage/bin/play-tech-demo -Dhttp.port=${PORT} -Dconfig.file=conf/application.conf
