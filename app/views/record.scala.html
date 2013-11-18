@@ -1,0 +1,27 @@
+@(records: List[Record], recordForm: Form[Record])
+
+@import helper._
+
+@main("Record list") {
+
+	<h1>@records.size() records</h1>
+	
+	<ul>
+		@for(record <- records) {
+			<li>@record.data
+			@form(routes.Application.delrecord(record.id)) {
+				<input type="submit" value="Delete">
+			}
+			</li>
+		}
+	</ul>
+	
+	<h2>Add new record</h2>
+	
+	@form(routes.Application.newRecord()) {
+	
+		@inputText(recordForm("data"))
+		<input type="Submit" value="Create">
+	}
+
+}
