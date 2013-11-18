@@ -8,6 +8,8 @@ GET		/pappu						controllers.Application.pappu()
 GET		/record						controllers.Application.record()
 POST	/record						controllers.Application.newRecord()
 POST	/delrecord/:id				controllers.Application.delrecord(id: Long)
+GET		/signin						controllers.Application.signin()
+POST	/signin						controllers.Application.signin()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

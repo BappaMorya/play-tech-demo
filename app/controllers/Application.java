@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
+
 import cmn.RecordStore;
 import models.Record;
 import play.*;
@@ -37,5 +41,24 @@ public class Application extends Controller {
     	RecordStore.deleteRecord(id);
     	return redirect(routes.Application.record());
     }
-
+    
+    public static Result signin() {
+    	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
+    	StringBuilder builder = new StringBuilder();
+    	builder.append("<ul>");
+        for (Map.Entry<String,String[]> entry : entries) {
+            final String key = entry.getKey();
+            final String value = Arrays.toString(entry.getValue());
+            builder.append("<li>")
+            	.append(key).append("-")
+            	.append(value).append("</li>");
+            Logger.debug(key + " " + value);
+        }
+        builder.append("</ul>");
+        Logger.debug(request().getQueryString("token"));
+        Logger.debug(request().getQueryString("errorMessage"));
+        Logger.debug(request().getQueryString("errorCode"));
+    	return ok(builder.toString());
+    }
+    
 }
