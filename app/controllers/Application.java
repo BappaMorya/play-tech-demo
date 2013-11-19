@@ -76,6 +76,9 @@ public class Application extends Controller {
             Logger.debug("Incoming parameter = " + key + ":" + value);
             attrMap.put(key, value);
         }
+    	
+    	System.out.println("Attribute map = " + attrMap);
+    	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
         	// redirect to another link
