@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -10,6 +11,10 @@ import play.*;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
+import play.libs.WS;
+import play.mvc.Result;
+import static play.libs.F.Function;
+import static play.libs.F.Promise;
 
 public class Application extends Controller {
 	
@@ -59,6 +64,39 @@ public class Application extends Controller {
         Logger.debug(request().getQueryString("errorMessage"));
         Logger.debug(request().getQueryString("errorCode"));
     	return ok(builder.toString());
+    }
+    
+    public static Result fbsignin() {
+    	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
+    	Map<String, String> attrMap = new HashMap<String, String>();
+    	
+    	for (Map.Entry<String,String[]> entry : entries) {
+            final String key = entry.getKey();
+            final String value = entry.getValue()[0];
+            Logger.debug("Incoming parameter = " + key + ":" + value);
+            attrMap.put(key, value);
+        }
+    	if(attrMap.containsKey("code")) {
+    		Logger.debug("Received code = " + attrMap.get("code"));
+        	// redirect to another link
+    		Promise<WS.Response> confirmId = WS.url("https://graph.facebook.com/oauth/access_token")
+    				.setQueryParameter("client_id", "169640416559253")
+    				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
+    				.setQueryParameter("code", attrMap.get("code")).get();
+    		confirmId.map((
+    	            new Function<WS.Response, Result>() {
+    	                public Result apply(WS.Response response) {
+    	                    return ok(response.getBody());
+    	                }
+    	            }
+    	    ));
+        }
+    	return ok("Alrighty then");
+    }
+    
+    public static Result landing() {
+    	return ok(landing.render());
     }
     
 }
