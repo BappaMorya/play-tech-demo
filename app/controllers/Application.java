@@ -20,7 +20,7 @@ public class Application extends Controller {
     }
     
     public static Result pappu() {
-    	return ok("Hello there!");
+    	return ok("Hello there buoy!");
     }
     
     public static Result record() {
