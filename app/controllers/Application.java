@@ -77,7 +77,7 @@ public class Application extends Controller {
             attrMap.put(key, value);
         }
     	
-    	System.out.println("Attribute map = " + attrMap);
+    	Logger.debug("Attribute map = " + attrMap);
     	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
@@ -90,12 +90,13 @@ public class Application extends Controller {
     		confirmId.map((
     	            new Function<WS.Response, Result>() {
     	                public Result apply(WS.Response response) {
-    	                    return ok(response.getBody());
+    	                	Logger.debug("Response = " + response.getBody());
+    	                    return ok(landing.render());
     	                }
     	            }
     	    ));
         }
-    	return ok("Alrighty then");
+    	return ok(landing.render());
     }
     
     public static Result landing() {
