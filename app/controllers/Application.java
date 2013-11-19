@@ -66,7 +66,7 @@ public class Application extends Controller {
     	return ok(builder.toString());
     }
     
-    public static Result fbsignin() {
+    public static Promise<Result> fbsignin() {
     	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
     	Map<String, String> attrMap = new HashMap<String, String>();
     	
@@ -79,6 +79,8 @@ public class Application extends Controller {
     	
     	Logger.debug("Attribute map = " + attrMap);
     	
+    	Promise<Result> result = null;
+    	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
         	// redirect to another link
@@ -87,7 +89,7 @@ public class Application extends Controller {
     				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
     				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
     				.setQueryParameter("code", attrMap.get("code")).get();
-    		confirmId.map((
+    		result = confirmId.map((
     	            new Function<WS.Response, Result>() {
     	                public Result apply(WS.Response response) {
     	                	Logger.debug("Response = " + response.getBody());
@@ -96,7 +98,7 @@ public class Application extends Controller {
     	            }
     	    ));
         }
-    	return ok(landing.render());
+    	return result;
     }
     
     public static Result landing() {
