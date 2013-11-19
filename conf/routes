@@ -8,7 +8,7 @@ GET		/pappu						controllers.Application.pappu()
 GET		/record						controllers.Application.record()
 POST	/record						controllers.Application.newRecord()
 POST	/delrecord/:id				controllers.Application.delrecord(id: Long)
-GET		/fbsignin					controllers.Application.signin()
+GET		/fbsignin					controllers.Application.fbsignin()
 GET		/landing					controllers.Application.landing()
 
 # Map static resources from the /public folder to the /assets URL path
