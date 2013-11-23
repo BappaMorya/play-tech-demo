@@ -82,6 +82,8 @@ public class Application extends Controller {
     	
     	Promise<Result> result = null;
     	
+    	final Map<String, String> accessAttrMap = new HashMap<String, String>();
+    	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
     		
@@ -93,16 +95,35 @@ public class Application extends Controller {
     	            new Function<WS.Response, Promise<Result>>() {
     	                public Promise<Result> apply(WS.Response response) {
     	                	Logger.debug("Outer Response = " + response.getBody());
+    	                	String[] tokens = response.getBody().split("&");
+    	                	for(String token : tokens) {
+    	                		String[] nvp = token.split("=");
+    	                		accessAttrMap.put(nvp[0], nvp[1]);
+    	                	}
     	                    return WS.url("https://graph.facebook.com/oauth/access_token")
     	                    		.setQueryParameter("client_id", "169640416559253")
     	                    		.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
     	                    		.setQueryParameter("grant_type", "client_credentials")
     	                    		.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
-    	                    		.get().map(
-    	                            new Function<WS.Response, Result>() {
-    	                                public Result apply(WS.Response response) {
+    	                    		.get().flatMap(
+    	                            new Function<WS.Response, Promise<Result>>() {
+    	                                public Promise<Result> apply(WS.Response response) {
     	                                	Logger.debug("Inner Response = " + response.getBody());
-    	                                    return ok(landing.render());
+    	                                	String appAccessToken = response.getBody().split("=")[1];
+    	                                	accessAttrMap.put("app_access_token", appAccessToken);
+    	                                	Logger.debug("Access map = " + accessAttrMap);
+    	                                	return WS.url("https://graph.facebook.com/debug_token")
+    	                                		.setQueryParameter("input_token", accessAttrMap.get("access_token"))
+    	                                		.setQueryParameter("access_token", accessAttrMap.get("app_access_token"))
+    	                                		.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    	                                		.get().map((
+    	                                	            new Function<WS.Response, Result>() {
+    	                            	                public Result apply(WS.Response response) {
+    	                            	                	Logger.debug("Check Response = " + response.getBody());
+    	                            	                    return ok(landing.render());
+    	                            	                }
+    	                            	            }
+    	                            	    ));
     	                                }
     	                            }
     	                    );
