@@ -11,6 +11,7 @@ import play.*;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
+import play.libs.F;
 import play.libs.WS;
 import play.mvc.Result;
 import static play.libs.F.Function;
@@ -92,7 +93,12 @@ public class Application extends Controller {
     	            new Function<WS.Response, Promise<Result>>() {
     	                public Promise<Result> apply(WS.Response response) {
     	                	Logger.debug("Outer Response = " + response.getBody());
-    	                    return WS.url("https://graph.facebook.com/oauth/access_token?client_id=169640416559253&client_secret=490f2388bb03e22ae33366fa64c9dbf5&grant_type=client_credentials").get().map(
+    	                    return WS.url("https://graph.facebook.com/oauth/access_token")
+    	                    		.setQueryParameter("client_id", "169640416559253")
+    	                    		.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
+    	                    		.setQueryParameter("grant_type", "client_credentials")
+    	                    		.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    	                    		.get().map(
     	                            new Function<WS.Response, Result>() {
     	                                public Result apply(WS.Response response) {
     	                                	Logger.debug("Inner Response = " + response.getBody());
