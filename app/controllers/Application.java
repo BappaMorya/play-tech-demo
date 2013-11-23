@@ -83,20 +83,42 @@ public class Application extends Controller {
     	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
-        	// redirect to another link
-    		Promise<WS.Response> confirmId = WS.url("https://graph.facebook.com/oauth/access_token")
+    		
+    		result = WS.url("https://graph.facebook.com/oauth/access_token")
     				.setQueryParameter("client_id", "169640416559253")
     				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
     				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
-    				.setQueryParameter("code", attrMap.get("code")).get();
-    		result = confirmId.map((
-    	            new Function<WS.Response, Result>() {
-    	                public Result apply(WS.Response response) {
-    	                	Logger.debug("Response = " + response.getBody());
-    	                    return ok(landing.render());
+    				.setQueryParameter("code", attrMap.get("code")).get().flatMap(
+    	            new Function<WS.Response, Promise<Result>>() {
+    	                public Promise<Result> apply(WS.Response response) {
+    	                	Logger.debug("Outer Response = " + response.getBody());
+    	                    return WS.url("https://graph.facebook.com/oauth/access_token?client_id=169640416559253&client_secret=490f2388bb03e22ae33366fa64c9dbf5&grant_type=client_credentials").get().map(
+    	                            new Function<WS.Response, Result>() {
+    	                                public Result apply(WS.Response response) {
+    	                                	Logger.debug("Inner Response = " + response.getBody());
+    	                                    return ok(landing.render());
+    	                                }
+    	                            }
+    	                    );
     	                }
     	            }
-    	    ));
+    	    );
+    	    return result;
+    		
+//        	// redirect to another link
+//    		Promise<WS.Response> confirmId = WS.url("https://graph.facebook.com/oauth/access_token")
+//    				.setQueryParameter("client_id", "169640416559253")
+//    				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+//    				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
+//    				.setQueryParameter("code", attrMap.get("code")).get();
+//    		result = confirmId.map((
+//    	            new Function<WS.Response, Result>() {
+//    	                public Result apply(WS.Response response) {
+//    	                	Logger.debug("Response = " + response.getBody());
+//    	                    return ok(landing.render());
+//    	                }
+//    	            }
+//    	    ));
         }
     	return result;
     }
