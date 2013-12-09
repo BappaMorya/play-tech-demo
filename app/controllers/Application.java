@@ -154,4 +154,8 @@ public class Application extends Controller {
     	return ok(landing.render());
     }
     
+    public static Result home() {
+    	return ok(home.render());
+    }
+    
 }
