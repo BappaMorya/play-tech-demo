@@ -11,7 +11,6 @@ import play.*;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
-import play.libs.F;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.WS;
