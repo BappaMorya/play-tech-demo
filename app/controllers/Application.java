@@ -12,6 +12,8 @@ import play.data.Form;
 import play.mvc.*;
 import views.html.*;
 import play.libs.F;
+import play.libs.F.Callback;
+import play.libs.F.Callback0;
 import play.libs.WS;
 import play.mvc.Result;
 import static play.libs.F.Function;
@@ -156,6 +158,57 @@ public class Application extends Controller {
     
     public static Result home() {
     	return ok(home.render());
+    }
+    
+    public static WebSocket<String> datastream(final String uid) {
+    	System.out.println("Datastream for " + uid);
+    	return new WebSocket<String>() {
+
+            // Called when the Websocket Handshake is done.
+            public void onReady(WebSocket.In<String> in, WebSocket.Out<String> out) {
+
+                // For each event received on the socket,
+                in.onMessage(new Callback<String>() {
+                    public void invoke(String event) {
+
+                        // Log events to the console
+                        System.out.println(event);
+
+                    }
+                });
+
+                // When the socket is closed.
+                in.onClose(new Callback0() {
+                    public void invoke() {
+
+                        System.out.println("Disconnected");
+
+                    }
+                });
+
+                try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+                // Send a single 'Hello!' message
+                out.write("Getting posts for " + uid);
+                try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+                out.write("Detecting birthday posts for " + uid);
+                try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+                out.write("Sending back response for " + uid);
+                out.close();
+            }
+
+        };
     }
     
 }
