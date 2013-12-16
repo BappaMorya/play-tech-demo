@@ -127,8 +127,12 @@ public class Application extends Controller {
     	                            	                public Result apply(WS.Response response) {
     	                            	                	Logger.debug("Check Response = " + response.getBody());
     	                            	                	JsonNode json = response.asJson();
-    	                            	                	JsonNode node = json.findValue("data/is_valid");
-    	                            	                	Logger.debug("Node value = " + node + " - " + node.asText());
+    	                            	                	JsonNode node = json.findValue("is_valid");
+    	                            	                	if(node != null) {
+    	                            	                		Logger.debug("Node value = " + node + " - " + node.asText());
+    	                            	                	} else {
+    	                            	                		Logger.debug("Failed to find is_valid");
+    	                            	                	}
     	                            	                    return ok(landing.render());
     	                            	                }
     	                            	            }
