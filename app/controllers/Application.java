@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import cmn.RecordStore;
 import models.Record;
 import play.*;
@@ -124,6 +126,9 @@ public class Application extends Controller {
     	                                	            new Function<WS.Response, Result>() {
     	                            	                public Result apply(WS.Response response) {
     	                            	                	Logger.debug("Check Response = " + response.getBody());
+    	                            	                	JsonNode json = response.asJson();
+    	                            	                	JsonNode node = json.findValue("data/is_valid");
+    	                            	                	Logger.debug("Node value = " + node + " - " + node.asText());
     	                            	                    return ok(landing.render());
     	                            	                }
     	                            	            }
