@@ -69,6 +69,9 @@ public class Application extends Controller {
     }
     
     public static Promise<Result> fbsignin() {
+    	
+    	Logger.debug("Invoked fbsignin");
+    	
     	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
     	Map<String, String> attrMap = new HashMap<String, String>();
     	
