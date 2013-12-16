@@ -1,93 +1,21 @@
 @base("Thank Back") {
-
 <div class="row featurette">
-	<div class="col-md-7">
+	<div class="col-md-12">
 		<h2 class="featurette-heading">
-			First featurette heading. <span class="text-muted">It'll blow
-				your mind.</span>
+			ThankBack. <span class="text-muted">Say thanks to birthday wishes on facebook in less than 10 seconds!</span>
 		</h2>
-		<p class="lead">Donec ullamcorper nulla non metus auctor
-			fringilla. Vestibulum id ligula porta felis euismod semper. Praesent
-			commodo cursus magna, vel scelerisque nisl consectetur. Fusce
-			dapibus, tellus ac cursus commodo.</p>
-	</div>
-	<div class="col-md-5">
-		<img class="featurette-image img-responsive"
-			data-src="holder.js/500x500/auto" alt="Generic placeholder image">
+		<p class="lead">SignIn with facebook account, select birthday wishes to say thanks to, done!</p>
 	</div>
 </div>
-
-<hr class="featurette-divider">
-
+<br />
 <div class="row featurette">
-	<div class="box chat alt span5 noMargin" onTablet="span12" onDesktop="span5">
-					
-					<div class="contacts">
-						<ul class="list">
-							<li>
-								<img class="avatar" src="img/avatar.jpg" alt="avatar">
-								<span class="name">Łukasz Holeczek</span>
-								<span class="status online"></span>
-								<span class="important">4</span>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar2.jpg" alt="avatar">
-								<span class="name">Łukasz Holeczek</span>
-								<span class="status offline"></span>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar3.jpg" alt="avatar">
-								<span class="name">Łukasz Holeczek</span>
-								<span class="status busy"></span>
-							</li>
-						</ul>	
-					</div>
-					<div class="conversation">
-						<!-- div class="actions">
-							<img class="avatar" src="img/avatar.jpg" alt="avatar">
-							<img class="avatar" src="img/avatar3.jpg" alt="avatar">
-							<img class="avatar" src="img/avatar4.jpg" alt="avatar">
-						</div -->
-						<ul class="talk">
-							<li>
-								<img class="avatar" src="img/avatar3.jpg" alt="avatar">
-								<span class="name">Ann Kovalsky</span>
-								<span class="time">1:32PM</span>
-								<div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar4.jpg" alt="avatar">
-								<span class="name">Megan Abbott</span>
-								<span class="time">1:32PM</span>
-								<div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar3.jpg" alt="avatar">
-								<span class="name">Ann Kovalsky</span>
-								<span class="time">1:32PM</span>
-								<div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar.jpg" alt="avatar">
-								<span class="name">Łukasz Holeczek</span>
-								<span class="time">1:32PM</span>
-								<div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-							</li>
-							<li>
-								<img class="avatar" src="img/avatar4.jpg" alt="avatar">
-								<span class="name">Megan Abbott</span>
-								<span class="time">1:32PM</span>
-								<div class="message">Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</div>
-							</li>
-						</ul>
-						<div class="form">
-							<input type="text" class="write-message" placeholder="Write Message">
-						</div>	
-					</div>
-					
-				</div>
-				
-			</div>
+	<div class="col-md-4">
+	</div>
+	<div class="col-md-4 text-center">
+		<a href="https://www.facebook.com/dialog/oauth?client_id=169640416559253&redirect_uri=http://play-tech-demo.herokuapp.com/fbsignin&response_type=code&scope=publish_actions,publish_stream,read_stream,user_birthday,user_photos,friends_photos,read_friendlists" class="btn btn-primary btn-lg active" role="button">SignIn with Facebook</a>
+	</div>
+	<div class="col-md-4">
+	</div>
 </div>
 
 }
