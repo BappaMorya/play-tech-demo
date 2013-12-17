@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -131,6 +132,17 @@ public class Application extends Controller {
     	                            	                	JsonNode node = json.findValue("is_valid");
     	                            	                	if(node != null) {
     	                            	                		Logger.debug("Node value = " + node + " - " + node.asText());
+    	                            	                		if(Boolean.parseBoolean(node.asText())) {
+    	                            	                			// token has been validated successfully, need to see permissions now
+    	                            	                			Logger.debug("Token validated successfully");
+    	                            	                			List<String> permList = json.findValuesAsText("scopes");
+    	                            	                			List<String> requestedPermissions = Arrays.asList(Play.application().configuration().getString("user_perm").split(","));
+    	                            	                			if(permList.containsAll(requestedPermissions)) {
+    	                            	                				// User has given us all permissions, its time to redirect user to new page
+    	                            	                				Logger.debug("All permissions received");
+    	                            	                				// Fetch posts, match them up
+    	                            	                			}
+    	                            	                		}
     	                            	                	} else {
     	                            	                		Logger.debug("Failed to find is_valid");
     	                            	                	}
