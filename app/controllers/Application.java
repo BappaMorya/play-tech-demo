@@ -14,6 +14,7 @@ import cmn.AccessTokenCache;
 import cmn.FBManager;
 import cmn.PostDataWrapper;
 import cmn.RecordStore;
+import cmn.UserProfile;
 import models.Record;
 import play.*;
 import play.data.Form;
@@ -156,8 +157,9 @@ public class Application extends Controller {
     	                            	                				Logger.debug("All permissions received");
     	                            	                				// Fetch posts, match them up
     	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
+    	                            	                				UserProfile user = FBManager.getInstance().fetchUserProfile(userIdNode.asText());
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
-    	                            	                				return ok(userposts.render(wrapper.getNotMatched(), wrapper.getBdayString(), 
+    	                            	                				return ok(userposts.render(wrapper.getNotMatched(), user, 
     	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
     	                            	                			}
     	                            	                		}

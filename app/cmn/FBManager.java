@@ -42,6 +42,14 @@ public class FBManager {
 		return instance;
 	}
 	
+	public UserProfile fetchUserProfile(String uid) {
+		FacebookClient facebookClient = new DefaultFacebookClient(tokenCache.getToken(uid));
+		User user = facebookClient.fetchObject("me", User.class);
+		UserProfile profile = new UserProfile(user.getId(), 
+				user.getName() == null ? user.getFirstName() : user.getName(), user.getBirthday());
+		return profile;
+	}
+	
 	public PostDataWrapper findNonBirthdayPosts(String uid) {
 		PostDataWrapper wrapper = new PostDataWrapper();
 		List<BdayPost> notMatchedPostList = new ArrayList<BdayPost>();
