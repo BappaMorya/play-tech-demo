@@ -141,7 +141,8 @@ public class Application extends Controller {
     	                            	                			// token has been validated successfully, need to see permissions now
     	                            	                			Logger.debug("Token validated successfully");
     	                            	                			JsonNode scopeNode = json.findValue("scopes");
-    	                            	                			Logger.debug("Perm list = " + scopeNode);
+    	                            	                			Logger.debug("Perm list = " + scopeNode + ", isArray = " + scopeNode.isArray()
+    	                            	                					+ ", size = " + scopeNode.size());
     	                            	                			List<String> requestedPermissions = Arrays.asList(Play.application().configuration().getString("user_perm").split(","));
     	                            	                			Logger.debug("Requested perm list = " + requestedPermissions);
 //    	                            	                			if(permList.containsAll(requestedPermissions)) {
