@@ -1,7 +1,9 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,7 +14,6 @@ import cmn.AccessTokenCache;
 import cmn.FBManager;
 import cmn.PostDataWrapper;
 import cmn.RecordStore;
-import models.BdayPost;
 import models.Record;
 import play.*;
 import play.data.Form;
@@ -141,19 +142,24 @@ public class Application extends Controller {
     	                            	                			// token has been validated successfully, need to see permissions now
     	                            	                			Logger.debug("Token validated successfully");
     	                            	                			JsonNode scopeNode = json.findValue("scopes");
-    	                            	                			Logger.debug("Perm list = " + scopeNode + ", isArray = " + scopeNode.isArray()
-    	                            	                					+ ", size = " + scopeNode.size());
+    	                            	                			List<String> permList = new ArrayList<String>();
+    	                            	                			if(scopeNode != null) {
+    	                            	                				Iterator<JsonNode> itr = scopeNode.elements();
+    	                            	                				while(itr.hasNext())
+    	                            	                					permList.add(itr.next().asText());
+    	                            	                			}
+    	                            	                			Logger.debug("Granted perm list = " + permList + ", size = " + permList.size());
     	                            	                			List<String> requestedPermissions = Arrays.asList(Play.application().configuration().getString("user_perm").split(","));
-    	                            	                			Logger.debug("Requested perm list = " + requestedPermissions);
-//    	                            	                			if(permList.containsAll(requestedPermissions)) {
-//    	                            	                				// User has given us all permissions, its time to redirect user to new page
-//    	                            	                				Logger.debug("All permissions received");
-//    	                            	                				// Fetch posts, match them up
-//    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
-//    	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
-//    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
-//    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
-//    	                            	                			}
+    	                            	                			Logger.debug("Requested perm list = " + requestedPermissions + ", size = " + requestedPermissions.size());
+    	                            	                			if(permList.containsAll(requestedPermissions)) {
+    	                            	                				// User has given us all permissions, its time to redirect user to new page
+    	                            	                				Logger.debug("All permissions received");
+    	                            	                				// Fetch posts, match them up
+    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
+    	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
+    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
+    	                            	                			}
     	                            	                		}
     	                            	                	} else {
     	                            	                		Logger.debug("Failed to find is_valid");
