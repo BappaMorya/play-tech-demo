@@ -8,7 +8,11 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import cmn.AccessTokenCache;
+import cmn.FBManager;
+import cmn.PostDataWrapper;
 import cmn.RecordStore;
+import models.BdayPost;
 import models.Record;
 import play.*;
 import play.data.Form;
@@ -130,7 +134,8 @@ public class Application extends Controller {
     	                            	                	Logger.debug("Check Response = " + response.getBody());
     	                            	                	JsonNode json = response.asJson();
     	                            	                	JsonNode node = json.findValue("is_valid");
-    	                            	                	if(node != null) {
+    	                            	                	JsonNode userIdNode = json.findValue("user_id");
+    	                            	                	if(node != null && userIdNode != null) {
     	                            	                		Logger.debug("Node value = " + node + " - " + node.asText());
     	                            	                		if(Boolean.parseBoolean(node.asText())) {
     	                            	                			// token has been validated successfully, need to see permissions now
@@ -141,6 +146,10 @@ public class Application extends Controller {
     	                            	                				// User has given us all permissions, its time to redirect user to new page
     	                            	                				Logger.debug("All permissions received");
     	                            	                				// Fetch posts, match them up
+    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
+    	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
+    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
     	                            	                			}
     	                            	                		}
     	                            	                	} else {
@@ -157,21 +166,6 @@ public class Application extends Controller {
     	            }
     	    );
     	    return result;
-    		
-//        	// redirect to another link
-//    		Promise<WS.Response> confirmId = WS.url("https://graph.facebook.com/oauth/access_token")
-//    				.setQueryParameter("client_id", "169640416559253")
-//    				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
-//    				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
-//    				.setQueryParameter("code", attrMap.get("code")).get();
-//    		result = confirmId.map((
-//    	            new Function<WS.Response, Result>() {
-//    	                public Result apply(WS.Response response) {
-//    	                	Logger.debug("Response = " + response.getBody());
-//    	                    return ok(landing.render());
-//    	                }
-//    	            }
-//    	    ));
         }
     	return result;
     }

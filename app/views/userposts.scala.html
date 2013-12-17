@@ -1,4 +1,4 @@
-@(records: List[BdayPost], myBirthDate: String)
+@(records: List[BdayPost], myBirthDate: String, totalCount: Integer, notMatchedCount: Integer)
 
 @import helper._
 
@@ -12,5 +12,32 @@
 		<p class="lead">Select which one of these are birthday wishes</p>
 	</div>
 </div>
+
+<p>We could detect @totalCount posts as birthday wishes, @notMatchedCount were not detected automatically as birthday wishes</p>
+
+@if(notMatchedCount > 0) {
+
+<table class="table">
+	<thead>
+          <tr>
+            <th>Friend Name</th>
+            <th>Post ID</th>
+            <th>Profile URL</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          	@for(record <- records) {
+				<tr>
+            		<td>@record.friendName</td>
+            		<td>@record.postId</td>
+            		<td>@record.profilPicUrl</td>
+            		<td>@record.postData</td>
+          		</tr>			
+			}
+        </tbody>
+</table>
+
+}
 
 }

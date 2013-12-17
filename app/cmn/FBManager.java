@@ -38,12 +38,13 @@ public class FBManager {
 		
 	}
 	
-	public FBManager getInstance() {
+	public static FBManager getInstance() {
 		return instance;
 	}
 	
-	public List<BdayPost> findNonBirthdayPosts(String uid) {
-		List<BdayPost> bdayPostList = new ArrayList<BdayPost>();
+	public PostDataWrapper findNonBirthdayPosts(String uid) {
+		PostDataWrapper wrapper = new PostDataWrapper();
+		List<BdayPost> notMatchedPostList = new ArrayList<BdayPost>();
 		Date filterDate = null;
     	Date beforeBirthDate = null;
     	
@@ -102,6 +103,13 @@ public class FBManager {
     					  } else {
     						  Logger.debug("Message (" + message + ") does not match!");
     						  BdayPost notMatchedPost = new BdayPost();
+    						  notMatchedPost.friendName = post.getFrom().getName();
+    						  notMatchedPost.postId = post.getId();
+    						  notMatchedPost.postData = message;
+    						  ProfilePic frndPic = facebookClient.fetchObject(post.getFrom().getId() + "/picture", ProfilePic.class, 
+    		    		    			Parameter.with("redirect", "false"));
+    						  notMatchedPost.profilPicUrl = frndPic.data.url;
+    						  Logger.debug("Not matched post = " + notMatchedPost);
     					  }
     				  }
     				  total++;
@@ -117,8 +125,14 @@ public class FBManager {
     		  if(stopNow)
     			  break;
     	}
+    	
+    	wrapper.setNotMatched(notMatchedPostList);
+    	wrapper.setMatchedCount(matched);
+    	wrapper.setNotMatchedCount(notMatched);
+    	wrapper.setTotalCount(total);
+    	wrapper.setBdayString(user.getBirthday());
 		
-		return bdayPostList;
+		return wrapper;
 		
 	}
 
