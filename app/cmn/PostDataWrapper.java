@@ -66,4 +66,12 @@ public class PostDataWrapper {
 		this.notMatched = notMatched;
 	}
 
+	@Override
+	public String toString() {
+		return "PostDataWrapper [matched=" + matched + ", notMatched="
+				+ notMatched + ", matchedCount=" + matchedCount
+				+ ", notMatchedCount=" + notMatchedCount + ", totalCount="
+				+ totalCount + ", bdayString=" + bdayString + "]";
+	}
+
 }

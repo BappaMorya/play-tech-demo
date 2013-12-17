@@ -157,7 +157,7 @@ public class Application extends Controller {
     	                            	                				// Fetch posts, match them up
     	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
-    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
+    	                            	                				return ok(userposts.render(wrapper.getNotMatched(), wrapper.getBdayString(), 
     	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
     	                            	                			}
     	                            	                		}

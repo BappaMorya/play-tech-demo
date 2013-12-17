@@ -54,7 +54,7 @@ public class FBManager {
 		
     	try {
     		Date userBirthDate = fbDateFormat.parse(user.getBirthday());
-    		System.out.println("User birthdate = " + userBirthDate);
+    		Logger.debug("User birthdate = " + userBirthDate);
     		Calendar calendar = Calendar.getInstance();
     		int curYear = calendar.get(Calendar.YEAR);
     		calendar.setTime(userBirthDate);
@@ -110,6 +110,7 @@ public class FBManager {
     		    		    			Parameter.with("redirect", "false"));
     						  notMatchedPost.profilPicUrl = frndPic.data.url;
     						  Logger.debug("Not matched post = " + notMatchedPost);
+    						  notMatchedPostList.add(notMatchedPost);
     					  }
     				  }
     				  total++;
