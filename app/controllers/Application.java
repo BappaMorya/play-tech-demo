@@ -140,19 +140,19 @@ public class Application extends Controller {
     	                            	                		if(Boolean.parseBoolean(node.asText())) {
     	                            	                			// token has been validated successfully, need to see permissions now
     	                            	                			Logger.debug("Token validated successfully");
-    	                            	                			List<String> permList = json.findValuesAsText("scopes");
-    	                            	                			Logger.debug("Perm list = " + permList);
+    	                            	                			JsonNode scopeNode = json.findValue("scopes");
+    	                            	                			Logger.debug("Perm list = " + scopeNode);
     	                            	                			List<String> requestedPermissions = Arrays.asList(Play.application().configuration().getString("user_perm").split(","));
     	                            	                			Logger.debug("Requested perm list = " + requestedPermissions);
-    	                            	                			if(permList.containsAll(requestedPermissions)) {
-    	                            	                				// User has given us all permissions, its time to redirect user to new page
-    	                            	                				Logger.debug("All permissions received");
-    	                            	                				// Fetch posts, match them up
-    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
-    	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
-    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
-    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
-    	                            	                			}
+//    	                            	                			if(permList.containsAll(requestedPermissions)) {
+//    	                            	                				// User has given us all permissions, its time to redirect user to new page
+//    	                            	                				Logger.debug("All permissions received");
+//    	                            	                				// Fetch posts, match them up
+//    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
+//    	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+//    	                            	                				return ok(userposts.render(wrapper.getMatched(), wrapper.getBdayString(), 
+//    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
+//    	                            	                			}
     	                            	                		}
     	                            	                	} else {
     	                            	                		Logger.debug("Failed to find is_valid");
