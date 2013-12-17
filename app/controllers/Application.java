@@ -141,7 +141,9 @@ public class Application extends Controller {
     	                            	                			// token has been validated successfully, need to see permissions now
     	                            	                			Logger.debug("Token validated successfully");
     	                            	                			List<String> permList = json.findValuesAsText("scopes");
+    	                            	                			Logger.debug("Perm list = " + permList);
     	                            	                			List<String> requestedPermissions = Arrays.asList(Play.application().configuration().getString("user_perm").split(","));
+    	                            	                			Logger.debug("Requested perm list = " + requestedPermissions);
     	                            	                			if(permList.containsAll(requestedPermissions)) {
     	                            	                				// User has given us all permissions, its time to redirect user to new page
     	                            	                				Logger.debug("All permissions received");
