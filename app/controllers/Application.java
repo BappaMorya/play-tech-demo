@@ -25,6 +25,7 @@ public class Application extends Controller {
 	private static Form<Record> recordForm = Form.form(Record.class);
 
     public static Result index() {
+    	Logger.debug("Value = " + Play.application().configuration().getString("user_perm"));
         return ok(index.render("Your new application is ready."));
     }
     
