@@ -13,6 +13,7 @@ GET		/fbsignin					controllers.Application.fbsignin()
 GET		/landing					controllers.Application.landing()
 GET		/home						controllers.Application.home()
 GET		/datastream/:uid			controllers.Application.datastream(uid: String)
+GET		/clearsession				controllers.Application.clearsession()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

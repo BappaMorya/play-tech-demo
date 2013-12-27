@@ -47,6 +47,13 @@ public class Application extends Controller {
         return ok(index.render("Your new application is ready."));
     }
     
+    public static Result clearsession() {
+    	Logger.debug("Clearing session for uid = " + session("uid"));
+    	session().remove("uid");
+    	Logger.debug("After clearing session, uid = " + session("uid"));
+    	return ok(home.render());
+    }
+    
     public static Result pappu() {
     	return ok("Hello there buoy!");
     }
