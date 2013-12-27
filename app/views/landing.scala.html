@@ -1,13 +1,43 @@
 @base("Thank Back") {
+<form method="POST" action="/finalposts" role="form" >
+<input type="hidden" name="uid" id="uid" value="662924001" />
+<table class="table">
+	<thead>
+          <tr>
+            <th>Friend Name</th>
+            <th>Post ID</th>
+            <th>Profile URL</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+        <tbody>
+          	
+				<tr>
+            		<td>Yatin Jayawant</td>
+            		<td>662924001_10151414441614002</td>
+            		<td>https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/370676_100002371746433_635548358_q.jpg</td>
+            		<td>Vadhadiwsachya hardik shubhechya Sidhya! :)</td>
+          		</tr>			
+			
+				<tr>
+            		<td>Vaibhav Kamble</td>
+            		<td>662924001_10151414013579002</td>
+            		<td>https://fbcdn-profile-a.akamaihd.net/hprofile-ak-prn2/1082935_502741656_306788654_q.jpg</td>
+            		<td>Vadhadiwasachya hardik shubhechha ! </td>
+          		</tr>			
+			
+        </tbody>
+</table>
 <div class="row featurette">
 <div class="col-md-3">
 </div>
 <div class="col-md-6">
 
-<div class="panel panel-primary">
+<input type="hidden" name="662924001_10151414441614002" id="662924001_10151414441614002" value="false" />
+<div class="panel panel-primary" id="662924001_10151414441614002_div">
   <div class="panel-body">
   	<div class="btn-group pull-right">
-        <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-default btn-sm" onclick="toggle_post('662924001_10151414441614002'); return false;"><span id="662924001_10151414441614002_span" class="glyphicon glyphicon-ok"></span></a>
       </div>
     <div class="media">
 	<a class="pull-left" href="#"> <img class="media-object"
@@ -21,10 +51,11 @@
   </div>
 </div>
 
-<div class="panel panel-primary">
+<input type="hidden" name="662924001_10151414013579002" id="662924001_10151414013579002" value="false" />
+<div class="panel panel-primary" id="662924001_10151414013579002_div">
   <div class="panel-body">
   	<div class="btn-group pull-right">
-        <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-default btn-sm" onclick="toggle_post('662924001_10151414013579002'); return false;"><span id="662924001_10151414013579002_span" class="glyphicon glyphicon-ok"></span></a>
       </div>
     <div class="media">
 	<a class="pull-left" href="#"> <img class="media-object"
@@ -32,7 +63,7 @@
 	</a>
 	<div class="media-body">
 		<h4 class="media-heading">Vaibhav Kamble</h4>
-		Vadhadiwasachya hardik shubhechha ! 
+		Vadhadiwasachya hardik shubhechha !  
 	</div>
 </div>
   </div>
@@ -42,5 +73,33 @@
 <div class="col-md-3">
 </div>
 </div>
-
+<div class="row featurette">
+	<div class="col-md-4">
+	</div>
+	<div class="col-md-4 text-center">
+		 <div class="form-actions"">
+		 	<button type="submit" class="btn btn-primary active text-center">Next</button>
+		 </div>		
+	</div>
+	<div class="col-md-4">
+	</div>
+</div>
+</form>
+<script>
+function toggle_post(postId)
+{
+	var h = document.getElementById(postId);
+	var panelDiv = document.getElementById(postId + "_div");
+	if(h.value == 'false') {
+		$('#' + postId + '_div').removeClass('panel-primary').addClass('panel-success');
+		$('#' + postId + '_span').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+		h.value = 'true';		
+	} else {
+		$('#' + postId + '_div').removeClass('panel-success').addClass('panel-primary');
+		$('#' + postId + '_span').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+		h.value = 'false';
+	}
+	return false;
+}
+</script>
 }

@@ -3,6 +3,9 @@
 @import helper._
 @import cmn._
 
+@divId(postId: String) = @{ postId + "_div" }
+@spanId(postId: String) = @{ postId + "_span" }
+
 @base("Thank Back") {
 
 <div class="row featurette">
@@ -45,13 +48,13 @@
 <div class="col-md-6">
 @for(record <- records) {
 <input type="hidden" name="@record.postId" id="@record.postId" value="false" />
-<div class="panel panel-primary">
+<div class="panel panel-primary" id="@divId(record.postId)">
   <div class="panel-body">
   	<div class="btn-group pull-right">
-        <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-default btn-sm" onclick="toggle_post('@record.postId'); return false;"><span id="@spanId(record.postId)" class="glyphicon glyphicon-ok"></span></a>
       </div>
     <div class="media">
-	<a class="pull-left" href="#"> <img class="media-object"
+	<a class="pull-left"> <img class="media-object"
 		src="@record.profilPicUrl" alt="Generic placeholder image">
 	</a>
 	<div class="media-body">
@@ -79,5 +82,21 @@
 </div>
 </form>
 }
-
+<script>
+function toggle_post(postId)
+{
+	var h = document.getElementById(postId);
+	var panelDiv = document.getElementById(postId + "_div");
+	if(h.value == 'false') {
+		$('#' + postId + '_div').removeClass('panel-primary').addClass('panel-success');
+		$('#' + postId + '_span').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+		h.value = 'true';		
+	} else {
+		$('#' + postId + '_div').removeClass('panel-success').addClass('panel-primary');
+		$('#' + postId + '_span').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+		h.value = 'false';
+	}
+	return false;
+}
+</script>
 }
