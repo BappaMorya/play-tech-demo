@@ -17,7 +17,8 @@
 <p>We could detect @totalCount posts as birthday wishes, @notMatchedCount were not detected automatically as birthday wishes</p>
 
 @if(notMatchedCount > 0) {
-
+<form action="/finalposts" role="form" >
+<input type="hidden" name="uid" id="uid" value="@userProfile.userId" />
 <table class="table">
 	<thead>
           <tr>
@@ -43,6 +44,7 @@
 </div>
 <div class="col-md-6">
 @for(record <- records) {
+<input type="hidden" name="@record.postId" id="@record.postId" value="false" />
 <div class="panel panel-primary">
   <div class="panel-body">
   	<div class="btn-group pull-right">
@@ -64,6 +66,16 @@
 <div class="col-md-3">
 </div>
 </div>
+<div class="row featurette">
+	<div class="col-md-4">
+	</div>
+	<div class="col-md-4 text-center">
+		<button type="submit" class="btn btn-primary btn-lg active">Next</button>
+	</div>
+	<div class="col-md-4">
+	</div>
+</div>
+</form>
 }
 
 }

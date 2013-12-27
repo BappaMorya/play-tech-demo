@@ -78,6 +78,24 @@ public class Application extends Controller {
     	return ok(builder.toString());
     }
     
+    public static Result finalposts() {
+    	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
+    	Logger.debug("Post Data keys = " + postData.keySet());
+    	final Set<Map.Entry<String,String[]>> entries = postData.entrySet();
+    	StringBuilder builder = new StringBuilder();
+    	builder.append("<ul>");
+        for (Map.Entry<String,String[]> entry : entries) {
+            final String key = entry.getKey();
+            final String value = Arrays.toString(entry.getValue());
+            builder.append("<li>")
+            	.append(key).append("-")
+            	.append(value).append("</li>");
+            Logger.debug(key + " " + value);
+        }
+        builder.append("</ul>");
+    	return ok(builder.toString());
+    }
+    
     public static Promise<Result> fbsignin() {
     	
     	Logger.debug("Invoked fbsignin");
