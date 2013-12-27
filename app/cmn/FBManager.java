@@ -82,7 +82,7 @@ public class FBManager {
   					  Parameter.with("limit", "50"));
     	
     	StringBuilder patternBuilder = new StringBuilder();
-    	patternBuilder.append("\\b(?:happy|birthday|bday|B'day");
+    	patternBuilder.append("\\b(?:happy|birthday|bday|B'day|wish");
     	if(user.getFirstName() != null)
     		patternBuilder.append("|").append(user.getFirstName());
     	if(user.getLastName() != null)

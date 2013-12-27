@@ -43,14 +43,21 @@
 </div>
 <div class="col-md-6">
 @for(record <- records) {
-<div class="media">
+<div class="panel panel-primary">
+  <div class="panel-body">
+  	<div class="btn-group pull-right">
+        <a href="#" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-remove"></span></a>
+      </div>
+    <div class="media">
 	<a class="pull-left" href="#"> <img class="media-object"
 		src="@record.profilPicUrl" alt="Generic placeholder image">
 	</a>
 	<div class="media-body">
 		<h4 class="media-heading">@record.friendName</h4>
-		@record.postData
+		@record.postData 
 	</div>
+</div>
+  </div>
 </div>
 }
 </div>
