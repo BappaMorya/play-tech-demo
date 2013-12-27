@@ -97,16 +97,17 @@ public class Application extends Controller {
     }
     
     public static Result finalposts() {
+    	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
+    	
     	// Session check
     	String uid = session("uid");
-    	if(uid == null) {
+    	if(uid == null || postData == null || postData.size() == 0) {
     		addError("No user logged in", "No valid Facebook user has logged in, Please first login using you Facebook account!");
     		return ok(home.render());
     	}
     	
     	// Go ahead do your stuff
     	Logger.debug("Working on user with id = " + uid);
-    	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
     	Logger.debug("Post Data keys = " + postData.keySet());
     	final Set<Map.Entry<String,String[]>> entries = postData.entrySet();
     	StringBuilder builder = new StringBuilder();
