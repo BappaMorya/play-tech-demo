@@ -30,6 +30,17 @@ import static play.libs.F.Promise;
 public class Application extends Controller {
 	
 	private static Form<Record> recordForm = Form.form(Record.class);
+	
+	public static final void addError(String errorHeader, String errorMsg) {
+		if(errorHeader == null && errorMsg == null) {
+			return;
+		}
+		flash("error-flag", "yes");
+		if(errorHeader != null)
+			flash("error-header", errorHeader);
+		if(errorMsg != null)
+			flash("error-msg", errorMsg);
+	}
 
     public static Result index() {
     	Logger.debug("Value = " + Play.application().configuration().getString("user_perm"));
@@ -200,9 +211,7 @@ public class Application extends Controller {
     }
     
     public static Result landing() {
-    	flash("error-flag", "yes");
-    	flash("error-header", "You jackass!");
-    	flash("error-msg", "What the fuck are you doing man ?");
+    	addError("You jackass!", "What the fuck are you doing man ?");
     	return ok(landing.render());
     }
     
