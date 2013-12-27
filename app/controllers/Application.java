@@ -200,6 +200,9 @@ public class Application extends Controller {
     }
     
     public static Result landing() {
+    	flash("error-flag", "yes");
+    	flash("error-header", "You jackass!");
+    	flash("error-msg", "What the fuck are you doing man ?");
     	return ok(landing.render());
     }
     

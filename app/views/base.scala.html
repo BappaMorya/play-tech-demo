@@ -120,7 +120,19 @@
     <!-- Wrap the rest of the page in another container to center all the content. -->
 
     <div class="container marketing">
-
+    
+	<!-- Common alert mechanism -->
+	@if(flash.get("error-flag") != null) {
+	<div class="alert alert-danger fade in">
+    	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    	@if(flash.get("error-header") != null) {
+    		<h4>@flash.get("error-header")</h4>
+    	}
+    	@if(flash.get("error-msg") != null) {
+        	<p>@flash.get("error-msg")</p>
+        }
+    </div>
+    }
       <!-- Three columns of text below the carousel -->
       <!-- 
       <div class="row">
@@ -207,5 +219,6 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="assets/javascripts/bootstrap.min.js"></script>
     <script src="assets/javascripts/holder.js"></script>
+    <script>$(".alert").alert();</script>
   </body>
 </html>
