@@ -21,26 +21,6 @@
 
 @if(notMatchedCount > 0) {
 <form method="POST" action="/finalposts" role="form" >
-<table class="table">
-	<thead>
-          <tr>
-            <th>Friend Name</th>
-            <th>Post ID</th>
-            <th>Profile URL</th>
-            <th>Message</th>
-          </tr>
-        </thead>
-        <tbody>
-          	@for(record <- records) {
-				<tr>
-            		<td>@record.friendName</td>
-            		<td>@record.postId</td>
-            		<td>@record.profilPicUrl</td>
-            		<td>@record.postData</td>
-          		</tr>			
-			}
-        </tbody>
-</table>
 <div class="row featurette">
 <div class="col-md-3">
 </div>
