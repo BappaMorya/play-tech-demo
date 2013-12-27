@@ -90,6 +90,15 @@ public class Application extends Controller {
     }
     
     public static Result finalposts() {
+    	// Session check
+    	String uid = session("uid");
+    	if(uid == null) {
+    		addError("No user logged in", "No valid Facebook user has logged in, Please first login using you Facebook account!");
+    		return ok(home.render());
+    	}
+    	
+    	// Go ahead do your stuff
+    	Logger.debug("Working on user with id = " + uid);
     	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
     	Logger.debug("Post Data keys = " + postData.keySet());
     	final Set<Map.Entry<String,String[]>> entries = postData.entrySet();
@@ -132,7 +141,7 @@ public class Application extends Controller {
     		
     		result = WS.url("https://graph.facebook.com/oauth/access_token")
     				.setQueryParameter("client_id", "169640416559253")
-    				.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    				.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
     				.setQueryParameter("code", attrMap.get("code")).get().flatMap(
     	            new Function<WS.Response, Promise<Result>>() {
@@ -147,7 +156,7 @@ public class Application extends Controller {
     	                    		.setQueryParameter("client_id", "169640416559253")
     	                    		.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
     	                    		.setQueryParameter("grant_type", "client_credentials")
-    	                    		.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    	                    		.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     	                    		.get().flatMap(
     	                            new Function<WS.Response, Promise<Result>>() {
     	                                public Promise<Result> apply(WS.Response response) {
@@ -158,7 +167,7 @@ public class Application extends Controller {
     	                                	return WS.url("https://graph.facebook.com/debug_token")
     	                                		.setQueryParameter("input_token", accessAttrMap.get("access_token"))
     	                                		.setQueryParameter("access_token", accessAttrMap.get("app_access_token"))
-    	                                		.setQueryParameter("redirect_uri", "http://play-tech-demo.herokuapp.com/fbsignin")
+    	                                		.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     	                                		.get().map((
     	                                	            new Function<WS.Response, Result>() {
     	                            	                public Result apply(WS.Response response) {
@@ -188,12 +197,25 @@ public class Application extends Controller {
     	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
     	                            	                				UserProfile user = FBManager.getInstance().fetchUserProfile(userIdNode.asText());
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+    	                            	                				session("uid", user.userId);
     	                            	                				return ok(userposts.render(wrapper.getNotMatched(), user, 
     	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
+    	                            	                			} else {
+    	                            	                				// Not all permissions received
+    	                            	                				session().remove("uid");
+    	    	                            	                		addError("Inadequate permissions!", "In order to process all posts effectively, "
+    	    	                            	                				+ "we need certain permssion temporarily on you facebook account, "
+    	    	                            	                				+ "please provide those necessary permssions next time!");
+    	    	                            	                		return ok(home.render());
     	                            	                			}
     	                            	                		}
     	                            	                	} else {
     	                            	                		Logger.debug("Failed to find is_valid");
+    	                            	                		Logger.debug("Check Response = " + response.getBody());
+    	                            	                		session().remove("uid");
+    	                            	                		addError("Ooops something is not right!", "Seems like we have problem signing you in "
+    	                            	                				+ "using Facebook account, Please try again later!");
+    	                            	                		return ok(home.render());
     	                            	                	}
     	                            	                    return ok(landing.render());
     	                            	                }
@@ -211,7 +233,7 @@ public class Application extends Controller {
     }
     
     public static Result landing() {
-    	addError("You jackass!", "What the fuck are you doing man ?");
+    	session("uid", "aisdasdahslkhdalkjsd");
     	return ok(landing.render());
     }
     
