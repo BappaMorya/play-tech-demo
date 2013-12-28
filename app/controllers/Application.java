@@ -127,7 +127,7 @@ public class Application extends Controller {
 			postStore.clearNotMatchedPosts(uid);
 		}
         
-    	return ok(home.render());
+    	return ok(postdistrib.render(session("userName"), postStore.getMatchedPosts(uid).size()));
     }
     
     public static Promise<Result> fbsignin() {
@@ -231,6 +231,7 @@ public class Application extends Controller {
         	                            	                				}
     	                            	                				}
     	                            	                				session("uid", user.userId);
+    	                            	                				session("userName", user.userName);
     	                            	                				return ok(userposts.render(wrapper.getNotMatched(), user, 
     	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
     	                            	                			} else {

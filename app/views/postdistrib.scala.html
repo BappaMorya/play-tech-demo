@@ -1,4 +1,4 @@
-@(userProfile: cmn.UserProfile, totalCount: Integer)
+@(userName: String, totalCount: Integer)
 
 @import helper._
 @import cmn._
@@ -8,7 +8,7 @@
 <div class="row featurette">
 	<div class="col-md-12 text-center">
 		<h2 class="featurette-heading">
-			Welcome&nbsp;@userProfile.userName, <span class="text-muted"></span><br /><span class="text-muted">You have total @totalCount bithday wishes</span>
+			Welcome&nbsp;@userName, <span class="text-muted"></span><br /><span class="text-muted">You have total @totalCount bithday wishes</span>
 		</h2>
 		<p class="lead">Select how wishes should be acknowledged</p>
 	</div>
