@@ -14,7 +14,9 @@ import cmn.AccessTokenCache;
 import cmn.FBManager;
 import cmn.PostDataWrapper;
 import cmn.RecordStore;
+import cmn.UserPostStore;
 import cmn.UserProfile;
+import models.BdayPost;
 import models.Record;
 import play.*;
 import play.data.Form;
@@ -106,22 +108,26 @@ public class Application extends Controller {
     		return ok(home.render());
     	}
     	
-    	// Go ahead do your stuff
+    	// Go ahead, do your stuff
     	Logger.debug("Working on user with id = " + uid);
     	Logger.debug("Post Data keys = " + postData.keySet());
-    	final Set<Map.Entry<String,String[]>> entries = postData.entrySet();
-    	StringBuilder builder = new StringBuilder();
-    	builder.append("<ul>");
-        for (Map.Entry<String,String[]> entry : entries) {
-            final String key = entry.getKey();
-            final String value = Arrays.toString(entry.getValue());
-            builder.append("<li>")
-            	.append(key).append("-")
-            	.append(value).append("</li>");
-            Logger.debug(key + " " + value);
-        }
-        builder.append("</ul>");
-    	return ok(builder.toString());
+    	UserPostStore postStore = UserPostStore.getInstance();
+    	List<String> notMatchedPosts = postStore.getNotMatchedPosts(uid);
+    	
+		if (notMatchedPosts != null) {
+			for (Map.Entry<String, String[]> entry : postData.entrySet()) {
+				final String key = entry.getKey();
+				final String value = entry.getValue()[0];
+				Logger.debug(key + " " + value);
+				if(notMatchedPosts.contains(key) && "true".equalsIgnoreCase(value.trim())) {
+					Logger.debug("Marking post id " + key + " as bithday post!");
+					postStore.addMatchedPost(uid, value.trim());
+				}
+			}
+			postStore.clearNotMatchedPosts(uid);
+		}
+        
+    	return ok(home.render());
     }
     
     public static Promise<Result> fbsignin() {
@@ -202,9 +208,28 @@ public class Application extends Controller {
     	                            	                				// User has given us all permissions, its time to redirect user to new page
     	                            	                				Logger.debug("All permissions received");
     	                            	                				// Fetch posts, match them up
-    	                            	                				AccessTokenCache.getInstance().addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
+    	                            	                				AccessTokenCache tokenCache = AccessTokenCache.getInstance();
+    	                            	                				if(tokenCache.getToken(userIdNode.asText()) != null) {
+    	                            	                					// Another session is already in progress
+    	                            	                					addError("Another user session in progress!", "Seems like you already "
+    	                            	                							+ "have started this process from other browser.");
+        	    	                            	                		return ok(home.render());
+    	                            	                				}
+    	                            	                				
+    	                            	                				tokenCache.addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
     	                            	                				UserProfile user = FBManager.getInstance().fetchUserProfile(userIdNode.asText());
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+    	                            	                				UserPostStore postStore = UserPostStore.getInstance();
+    	                            	                				if(wrapper.getMatched() != null && wrapper.getMatched().size() > 0) {
+    	                            	                					for(BdayPost post : wrapper.getMatched()) {
+        	                            	                					postStore.addMatchedPost(user.getUserId(), post.postId);
+        	                            	                				}
+    	                            	                				}
+    	                            	                				if(wrapper.getNotMatched() != null && wrapper.getNotMatched().size() > 0) {
+    	                            	                					for(BdayPost post : wrapper.getNotMatched()) {
+        	                            	                					postStore.addNotMatchedPost(user.getUserId(), post.postId);
+        	                            	                				}
+    	                            	                				}
     	                            	                				session("uid", user.userId);
     	                            	                				return ok(userposts.render(wrapper.getNotMatched(), user, 
     	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
