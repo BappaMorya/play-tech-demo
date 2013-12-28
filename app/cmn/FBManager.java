@@ -53,6 +53,7 @@ public class FBManager {
 	public PostDataWrapper findNonBirthdayPosts(String uid) {
 		PostDataWrapper wrapper = new PostDataWrapper();
 		List<BdayPost> notMatchedPostList = new ArrayList<BdayPost>();
+		List<BdayPost> matchedPostList = new ArrayList<BdayPost>();
 		Date filterDate = null;
     	Date beforeBirthDate = null;
     	
@@ -107,7 +108,12 @@ public class FBManager {
     					  Matcher matcher = pattern.matcher(message);
     					  if(matcher.find()) {
     						  Logger.debug(post.getId() + " Message (" + message + ") matches");
+    						  BdayPost matchedPost = new BdayPost();
+    						  matchedPost.friendName = post.getFrom().getName();
+    						  matchedPost.postId = post.getId();
+    						  matchedPost.postData = message;
     						  matched++;
+    						  matchedPostList.add(matchedPost);
     					  } else {
     						  Logger.debug("Message (" + message + ") does not match!");
     						  BdayPost notMatchedPost = new BdayPost();
@@ -136,8 +142,9 @@ public class FBManager {
     	}
     	
     	wrapper.setNotMatched(notMatchedPostList);
-    	wrapper.setMatchedCount(matched);
     	wrapper.setNotMatchedCount(notMatched);
+    	wrapper.setMatched(matchedPostList);
+    	wrapper.setMatchedCount(matched);
     	wrapper.setTotalCount(total);
     	wrapper.setBdayString(user.getBirthday());
 		
