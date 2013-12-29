@@ -1,4 +1,7 @@
 @base("Thank Back") {
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+
 <form method="POST" action="/finalposts" role="form" >
 <input type="hidden" name="uid" id="uid" value="662924001" />
 <table class="table">
@@ -85,6 +88,29 @@
 	</div>
 </div>
 </form>
+<br /><br /><br />
+<div class="row featurette">
+	<div class="col-md-4">
+	</div>
+	<div class="col-md-4 text-center">
+		<ul id="sliders">
+			<li>
+				<div class="slider"></div> <span class="value">0</span>
+			</li>
+			<li>
+				<div class="slider"></div> <span class="value">0</span>
+			</li>
+			<li>
+				<div class="slider"></div> <span class="value">0</span>
+			</li>
+			<li>
+				<div class="slider"></div> <span class="value">0</span>
+			</li>
+		</ul>
+	</div>
+	<div class="col-md-4">
+	</div>
+</div>
 <script>
 function toggle_post(postId)
 {
@@ -101,5 +127,44 @@ function toggle_post(postId)
 	}
 	return false;
 }
+
+var sliders = $("#sliders .slider");
+
+sliders.each(function() {
+    var value = parseInt($(this).text(), 10),
+        availableTotal = 400;
+
+    $(this).empty().slider({
+        value: 0,
+        min: 0,
+        max: 400,
+        range: "max",
+        step: 10,
+        animate: 100,
+        slide: function(event, ui) {
+
+            // Get current total
+            var total = 0;    
+
+            sliders.not(this).each(function() {
+                total += $(this).slider("option", "value");
+            });    
+
+
+            var max = availableTotal - total;            
+
+            if (max - ui.value >= 0) {
+                // Need to do this because apparently jQ UI
+                // does not update value until this event completes
+                total += ui.value;
+                console.log(max-ui.value);
+                $(this).siblings().text(ui.value);
+            } else {
+                return false;
+            }
+        }
+    });
+});
+
 </script>
 }
