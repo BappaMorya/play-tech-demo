@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title> - jsFiddle demo</title>
+  
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.8.3.js'></script>
+  <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+  
+  <script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css">
+  
+  <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+  
+    
+    
+      <script type='text/javascript' src="http://twitlabs.net/bootstrap/js/bootstrap.js"></script>
+    
+  
+    
+      <link rel="stylesheet" type="text/css" href="http://twitlabs.net/bootstrap/css/bootstrap.min.css">
+    
+    
+  
+  <style type='text/css'>
+#slider {
+  width: 500px;
+}
+ 
+.container {
+    margin-top: 100px;
+}
+  </style>
+  
+ 
+ 
+<script type='text/javascript'>//<![CDATA[ 
+$(window).load(function(){
+    
+    function repositionTooltip( e, ui ){
+        // If you're on Bootstrap 3.x change "tooltip" to "bs.tooltip"
+        // Props to @fd_tl in the comments for the tip!
+        var div = $(ui.handle).data("tooltip").$tip[0];
+        var pos = $.extend({}, $(ui.handle).offset(), { width: $(ui.handle).get(0).offsetWidth,
+                                                        height: $(ui.handle).get(0).offsetHeight
+                  });
+        
+        var actualWidth = div.offsetWidth;
+        
+        tp = {left: pos.left + pos.width / 2 - actualWidth / 2}            
+        $(div).offset(tp);
+        
+        $(div).find(".tooltip-inner").text( ui.value );
+    }
+    
+    $("#slider").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
+    
+    $("#slider .ui-slider-handle:first").tooltip( {
+    	title: $("#slider").slider("value"), trigger: "manual"
+    }).tooltip("show");
+    
+});//]]>  
+ 
+</script>
+ 
+ 
+</head>
+<body>
+ 
+  <div class="container">
+    <div class="span6 offset3">
+        <div id="slider"></div>
+    </div>
+  </div>
+ 
+  
+</body>
+ 
+ 
+</html>

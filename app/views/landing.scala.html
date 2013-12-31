@@ -107,6 +107,10 @@
 				<div class="slider"></div> <span class="value">0</span>
 			</li>
 		</ul>
+		<br /><br /><br />
+		<div id="sliderr1"></div><br /><br />
+		<div id="sliderr2"></div><br /><br />
+		<div id="sliderr3"></div><br /><br />
 	</div>
 	<div class="col-md-4">
 	</div>
@@ -128,42 +132,40 @@ function toggle_post(postId)
 	return false;
 }
 
-var sliders = $("#sliders .slider");
+var sliders = $("#sliderr1 #sliderr2 #sliderr3");
 
 sliders.each(function() {
-    var value = parseInt($(this).text(), 10),
-        availableTotal = 400;
+	console.log($(this));	
+}
 
-    $(this).empty().slider({
-        value: 0,
-        min: 0,
-        max: 400,
-        range: "max",
-        step: 10,
-        animate: 100,
-        slide: function(event, ui) {
-
-            // Get current total
-            var total = 0;    
-
-            sliders.not(this).each(function() {
-                total += $(this).slider("option", "value");
-            });    
-
-
-            var max = availableTotal - total;            
-
-            if (max - ui.value >= 0) {
-                // Need to do this because apparently jQ UI
-                // does not update value until this event completes
-                total += ui.value;
-                console.log(max-ui.value);
-                $(this).siblings().text(ui.value);
-            } else {
-                return false;
-            }
-        }
-    });
+$(window).load(function(){
+	
+	var value = parseInt($(this).text(), 10),
+    	availableTotal = 40;
+    
+    function repositionTooltip( e, ui ){
+        // If you're on Bootstrap 3.x change "tooltip" to "bs.tooltip"
+        // Props to fd_tl in the comments for the tip!
+        var div = $(ui.handle).data("bs.tooltip").$tip[0];
+        var pos = $.extend({}, $(ui.handle).offset(), { width: $(ui.handle).get(0).offsetWidth,
+                                                        height: $(ui.handle).get(0).offsetHeight
+                  });
+        
+        var actualWidth = div.offsetWidth;
+        
+        tp = {left: pos.left + pos.width / 2 - actualWidth / 2}            
+        $(div).offset(tp);
+        
+        $(div).find(".tooltip-inner").text( ui.value );
+    }
+    
+    $("#sliderr1").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
+    $("#sliderr1 .ui-slider-handle:first").tooltip({ title: $("#sliderr1").slider("value"), trigger: "manual" }).tooltip("show");
+    $("#sliderr2").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
+    $("#sliderr2 .ui-slider-handle:first").tooltip({ title: $("#sliderr2").slider("value"), trigger: "manual" }).tooltip("show");
+    $("#sliderr3").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
+    $("#sliderr3 .ui-slider-handle:first").tooltip({ title: $("#sliderr3").slider("value"), trigger: "manual" }).tooltip("show");
+    
 });
 
 </script>
