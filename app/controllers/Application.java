@@ -98,6 +98,53 @@ public class Application extends Controller {
     	return ok(builder.toString());
     }
     
+    public static Result thankthemall() {
+    	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
+    	
+    	// Session check
+    	String uid = session("uid");
+    	if(uid == null || postData == null || postData.size() == 0) {
+    		addError("No user logged in", "No valid Facebook user has logged in, Please first login using you Facebook account!");
+    		return ok(home.render());
+    	}
+    	
+    	Logger.debug("Working on user with id = " + uid);
+    	
+    	// Go ahead, do your stuff
+    	String userName = session("userName");
+    	UserPostStore postStore = UserPostStore.getInstance();
+    	List<String> matchedPosts = postStore.getMatchedPosts(uid);
+    	
+    	if(!postData.containsKey("sliderr1_value") || !postData.containsKey("sliderr2_value") || !postData.containsKey("sliderr3_value")) {
+    		session().clear();
+    		addError("Something fishy going on here!", "Seems like request you sent was incomplete!");
+    		return ok(home.render());
+    	}
+    	
+    	int likeCount = 0;
+    	int sayThanksAlotCount = 0;
+    	int sayThankYouCount = 0;
+    	
+    	try {
+    		likeCount = Integer.parseInt(postData.get("sliderr1_value")[0]);
+    		sayThanksAlotCount = Integer.parseInt(postData.get("sliderr2_value")[0]);
+    		sayThankYouCount = Integer.parseInt(postData.get("sliderr3_value")[0]);
+    	} catch (NumberFormatException nfe) {
+    		Logger.error("Failed to parse numbers!", nfe);
+    	}
+    	
+    	if((likeCount + sayThanksAlotCount + sayThankYouCount) != matchedPosts.size()) {
+    		session().clear();
+    		addError("Something fishy going on here!", "Don't be a smart ass!");
+    		return ok(home.render());
+    	}
+    	
+    	Logger.debug("Likes = " + likeCount + ", Thanks a lot = " + sayThanksAlotCount
+    			+ ", Thank you = " + sayThankYouCount);
+    	
+    	return ok(alldone.render(userName, matchedPosts.size()));
+    }
+    
     public static Result finalposts() {
     	final Map<String, String[]> postData = request().body().asFormUrlEncoded();
     	

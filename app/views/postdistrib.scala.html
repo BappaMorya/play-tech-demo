@@ -8,10 +8,141 @@
 <div class="row featurette">
 	<div class="col-md-12 text-center">
 		<h2 class="featurette-heading">
-			Welcome&nbsp;@userName, <span class="text-muted"></span><br /><span class="text-muted">You have total @totalCount bithday wishes</span>
+			Welcome&nbsp;@userName, <span class="text-muted"></span><br /><span class="text-muted">You have total @totalCount birthday wishes</span>
 		</h2>
 		<p class="lead">Select how wishes should be acknowledged</p>
 	</div>
 </div>
+<form method="POST" action="/thankthemall" role="form" >
 
+<div class="row text-center">
+<p>
+  			<label for="curTotal">Currently selected posts are </label>
+  			<input type="text" id="curTotal" style="border:0; font-weight:bold;">
+		</p>
+		<br />
+</div>
+<div class="row">
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-2 text-right">
+	<strong>Like a post</strong>
+	</div>
+	<div class="col-md-4">
+		<input type="hidden" name="sliderr1_value" id="sliderr1_value" value="0" />
+		<div id="sliderr1"></div><br /><br />
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-2 text-right">
+	<strong>Say "Thanks a lot"</strong>
+	</div>
+	<div class="col-md-4">
+	<input type="hidden" name="sliderr2_value" id="sliderr2_value" value="0" />
+		<div id="sliderr2"></div><br /><br />
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-2 text-right">
+	<strong>Say "Thank you"</strong>
+	</div>
+	<div class="col-md-4">
+	<input type="hidden" name="sliderr3_value" id="sliderr3_value" value="0" />
+		<div id="sliderr3"></div><br /><br />
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>
+<div class="row featurette">
+	<div class="col-md-4">
+	</div>
+	<div class="col-md-4 text-center">
+		 <div class="form-actions"">
+		 	<button type="submit" class="btn btn-primary active text-center">Thank Them All!</button>
+		 </div>		
+	</div>
+	<div class="col-md-4">
+	</div>
+</div>
+</form>
+<script>
+function toggle_post(postId)
+{
+	var h = document.getElementById(postId);
+	var panelDiv = document.getElementById(postId + "_div");
+	if(h.value == 'false') {
+		$('#' + postId + '_div').removeClass('panel-primary').addClass('panel-success');
+		$('#' + postId + '_span').removeClass('glyphicon-ok').addClass('glyphicon-remove');
+		h.value = 'true';		
+	} else {
+		$('#' + postId + '_div').removeClass('panel-success').addClass('panel-primary');
+		$('#' + postId + '_span').removeClass('glyphicon-remove').addClass('glyphicon-ok');
+		h.value = 'false';
+	}
+	return false;
+}
+
+var sliders = $("#sliderr1,#sliderr2,#sliderr3");
+
+sliders.each(function() {
+	
+	//console.log($(this).find('.ui-slider-handle:first'));
+	
+    var value = parseInt($(this).text(), 10),
+        availableTotal = @totalCount;
+    
+	function calcTotal( e, ui ) {
+    	
+		var total = 0;
+		//console.log($(this).attr('id'));
+
+        sliders.not(this).each(function() {
+            total += $(this).slider("option", "value");
+        });    
+
+
+        var max = availableTotal - total;            
+
+        if (max - ui.value >= 0) {
+        	$("#" + $(this).attr('id') + "_value").val(ui.value)
+            total += ui.value;
+            //console.log(max-ui.value);
+            $( "#curTotal" ).val(total);
+        } else {
+            return false;
+        }
+        
+        repositionTooltip( e, ui );
+        
+    }
+    
+    function repositionTooltip( e, ui ) {
+    	
+        var div = $(ui.handle).data("bs.tooltip").$tip[0];
+        var pos = $.extend({}, $(ui.handle).offset(), { width: $(ui.handle).get(0).offsetWidth,
+                                                        height: $(ui.handle).get(0).offsetHeight
+                  });
+        
+        var actualWidth = div.offsetWidth;
+        
+        tp = {left: pos.left + pos.width / 2 - actualWidth / 2}            
+        $(div).offset(tp);
+        
+        $(div).find(".tooltip-inner").text( ui.value );
+    }
+    
+    $(this).slider({ value: 1, max: @totalCount, range: "min", slide: calcTotal, stop: repositionTooltip });
+    $(this).find('.ui-slider-handle:first').tooltip({ title: $(this).slider("value"), trigger: "manual" }).tooltip("show");
+
+});
+
+</script>
 }
