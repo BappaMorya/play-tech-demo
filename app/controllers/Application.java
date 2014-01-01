@@ -141,8 +141,14 @@ public class Application extends Controller {
     	
     	Logger.debug("Likes = " + likeCount + ", Thanks a lot = " + sayThanksAlotCount
     			+ ", Thank you = " + sayThankYouCount);
+
+    	int postCount = matchedPosts.size();
     	
-    	return ok(alldone.render(userName, matchedPosts.size()));
+    	if(!FBManager.IS_MAGIC_MODE) {
+    		postCount = FBManager.getInstance().wishThemBack(uid, likeCount, sayThanksAlotCount, sayThankYouCount, matchedPosts);
+    	}
+    	
+    	return ok(alldone.render(userName, postCount));
     }
     
     public static Result finalposts() {

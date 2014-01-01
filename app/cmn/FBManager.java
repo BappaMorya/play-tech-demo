@@ -70,6 +70,47 @@ public class FBManager {
 		return profile;
 	}
 	
+	public int wishThemBack(String uid, int likeCount, int sayThanksAlotCount, int sayThankYouCount, List<String> postIdList) {
+		FacebookClient facebookClient = new DefaultFacebookClient(tokenCache.getToken(uid));
+		
+		List<BatchRequest> batchRequests = new ArrayList<BatchRequest>();
+		
+		for(int i=0; i<likeCount; i++) {
+			BatchRequest request = new BatchRequestBuilder(postIdList.get(i) + "/likes").method("POST").build();
+			batchRequests.add(request);
+		}
+		
+		for(int i=0; i < sayThanksAlotCount; i++) {
+			BatchRequest request = new BatchRequestBuilder(postIdList.get(i + likeCount) + "/comments")
+	  			.method("POST").parameters(Parameter.with("message", "Thanks a lot!")).build();
+			batchRequests.add(request);
+		}
+		
+		for(int i=0; i < sayThankYouCount; i++) {
+			BatchRequest request = new BatchRequestBuilder(postIdList.get(i + likeCount + sayThanksAlotCount) + "/comments")
+	  			.method("POST").parameters(Parameter.with("message", "Thanks you!")).build();
+				batchRequests.add(request);
+		}
+		
+		BatchRequest request = new BatchRequestBuilder(uid + "/permissions")
+			.method("DELETE").build();
+	
+		batchRequests.add(request);
+		
+		int count = postIdList.size();
+		List<BinaryAttachment> list = new ArrayList<BinaryAttachment>();
+    	List<BatchResponse> batchResponses =
+    			  facebookClient.executeBatch(batchRequests, list);
+    	for(BatchResponse response : batchResponses) {
+    		if(response.getCode() != 200) {
+    			count--;
+    			Logger.error("Failed to execute request in a batch => " + response);
+    		}
+    	}
+    	
+    	return count;
+	}
+	
 	public PostDataWrapper findNonBirthdayPosts(String uid) {
 		PostDataWrapper wrapper = new PostDataWrapper();
 		List<BdayPost> notMatchedPostList = new ArrayList<BdayPost>();
