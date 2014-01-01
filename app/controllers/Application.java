@@ -213,7 +213,9 @@ public class Application extends Controller {
     	final Map<String, String> accessAttrMap = new HashMap<String, String>();
     	
     	if(accessAttrMap.containsKey("error")) {
-    		Promise<Result> myPromise = Promise.promise(new Function0<Result>() {
+    		Logger.debug("Something is very wrong here!");
+    		
+    		result = Promise.promise(new Function0<Result>() {
     		    public Result apply() throws Throwable {
     		    	session().clear();
     	    		addError("Wow, what did just happen ?", "Looks like you don't want to thank for birthday wishes!");
@@ -221,7 +223,6 @@ public class Application extends Controller {
     		    }
 
     		});
-    		return myPromise;
     	}
     	
     	if(attrMap.containsKey("code")) {
