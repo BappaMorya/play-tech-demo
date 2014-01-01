@@ -178,7 +178,6 @@ public class FBManager {
     						  matchedPost.friendName = post.getFrom().getName();
     						  matchedPost.postId = post.getId();
     						  matchedPost.postData = message;
-    						  matched++;
     						  matchedPostList.add(matchedPost);
     					  } else {
     						  Logger.debug("Message (" + message + ") " + post.getFrom().getName() + " does not match!");
