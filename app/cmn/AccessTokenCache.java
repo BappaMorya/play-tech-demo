@@ -24,5 +24,9 @@ public class AccessTokenCache {
 	public String getToken(String uid) {
 		return tokenMap.get(uid);
 	}
+	
+	public void removeToken(String uid) {
+		tokenMap.remove(uid);
+	}
 
 }

@@ -148,6 +148,10 @@ public class Application extends Controller {
     		postCount = FBManager.getInstance().wishThemBack(uid, likeCount, sayThanksAlotCount, sayThankYouCount, matchedPosts);
     	}
     	
+    	session().clear();
+    	AccessTokenCache.getInstance().removeToken(uid);
+    	UserPostStore.getInstance().removeUser(uid);
+    	
     	return ok(alldone.render(userName, postCount));
     }
     
@@ -275,6 +279,7 @@ public class Application extends Controller {
     	                            	                				// Check if user has set birth date on his profile
     	                            	                				if(user.getBirthDate() == null || user.getBirthDate().trim().length() < 1) {
     	                            	                					session().remove("uid");
+    	                            	                					tokenCache.removeToken(user.getUserId());
         	    	                            	                		addError("Failed to get birth date!", "In order to process all posts effectively, "
         	    	                            	                				+ "please set birth date on your facebook account.");
         	    	                            	                		return ok(home.render());
@@ -284,6 +289,7 @@ public class Application extends Controller {
     	                            	                				if(!FBManager.IS_MAGIC_MODE) {
     	                            	                					if(!FBManager.getInstance().hasBirthdayOccured(user.getBirthDate())) {
     	                            	                						session().remove("uid");
+    	                            	                						tokenCache.removeToken(user.getUserId());
             	    	                            	                		addError("Not your birthday", "It's not your birthday yet, please try again after your birthday this year!");
             	    	                            	                		return ok(home.render());
     	                            	                					}
