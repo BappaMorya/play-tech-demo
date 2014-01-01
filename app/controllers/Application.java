@@ -218,6 +218,24 @@ public class Application extends Controller {
     	                            	                				
     	                            	                				tokenCache.addToken(userIdNode.asText(), accessAttrMap.get("access_token"));
     	                            	                				UserProfile user = FBManager.getInstance().fetchUserProfile(userIdNode.asText());
+    	                            	                				
+    	                            	                				// Check if user has set birth date on his profile
+    	                            	                				if(user.getBirthDate() == null || user.getBirthDate().trim().length() < 1) {
+    	                            	                					session().remove("uid");
+        	    	                            	                		addError("Failed to get birth date!", "In order to process all posts effectively, "
+        	    	                            	                				+ "please set birth date on your facebook account.");
+        	    	                            	                		return ok(home.render());
+    	                            	                				}
+    	                            	                				
+    	                            	                				// Check if birthday has already occured this year or not
+    	                            	                				if(!FBManager.IS_MAGIC_MODE) {
+    	                            	                					if(!FBManager.getInstance().hasBirthdayOccured(user.getBirthDate())) {
+    	                            	                						session().remove("uid");
+            	    	                            	                		addError("Not your birthday", "It's not your birthday yet, please try again after your birthday this year!");
+            	    	                            	                		return ok(home.render());
+    	                            	                					}
+    	                            	                				}
+    	                            	                				
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
     	                            	                				UserPostStore postStore = UserPostStore.getInstance();
     	                            	                				if(wrapper.getMatched() != null && wrapper.getMatched().size() > 0) {

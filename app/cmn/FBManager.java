@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import play.Logger;
+import play.Play;
 import models.BdayPost;
 
 import com.restfb.BinaryAttachment;
@@ -32,6 +33,8 @@ public class FBManager {
 	
 	private static final AccessTokenCache tokenCache = AccessTokenCache.getInstance();
 	
+	public static final boolean IS_MAGIC_MODE = Boolean.parseBoolean(Play.application().configuration().getString("magic"));
+	
 	private static final SimpleDateFormat fbDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	private FBManager() {
@@ -40,6 +43,23 @@ public class FBManager {
 	
 	public static FBManager getInstance() {
 		return instance;
+	}
+	
+	public boolean hasBirthdayOccured(String birthDate) {
+		try {
+			Date userBirthDate = fbDateFormat.parse(birthDate);
+    		Calendar calendar = Calendar.getInstance();
+    		int curYear = calendar.get(Calendar.YEAR);
+    		calendar.setTime(userBirthDate);
+    		calendar.set(Calendar.YEAR, curYear);
+    		
+    		if(calendar.getTime().after(Calendar.getInstance().getTime()))
+				return true;
+		} catch (ParseException e) {
+			Logger.error("Failed to parse user birth date = " + birthDate, e);
+			return false;
+		}
+		return false;
 	}
 	
 	public UserProfile fetchUserProfile(String uid) {
@@ -67,7 +87,10 @@ public class FBManager {
     		Calendar calendar = Calendar.getInstance();
     		int curYear = calendar.get(Calendar.YEAR);
     		calendar.setTime(userBirthDate);
-    		calendar.set(Calendar.YEAR, curYear);
+    		if(IS_MAGIC_MODE)
+    			calendar.set(Calendar.YEAR, curYear - 1);
+    		else
+    			calendar.set(Calendar.YEAR, curYear);
     		filterDate = new Date(calendar.getTimeInMillis() + 1000L * 60L * 60L * 24L);
     		beforeBirthDate = new Date(calendar.getTimeInMillis() - 1000L * 60L * 60L * 24L);
 		} catch (ParseException e) {

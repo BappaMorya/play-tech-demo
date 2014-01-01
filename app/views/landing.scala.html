@@ -1,7 +1,9 @@
 @base("Thank Back") {
 
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
-
+<style type="text/css">
+#unicornSlider { display:inline-block }
+</style>
 <form method="POST" action="/finalposts" role="form" >
 <input type="hidden" name="uid" id="uid" value="662924001" />
 <table class="table">
@@ -89,30 +91,50 @@
 </div>
 </form>
 <br /><br /><br />
-<div class="row featurette">
-	<div class="col-md-4">
+<div class="row text-center">
+<p>
+  			<label for="curTotal">Current Total </label>
+  			<input type="text" id="curTotal" style="border:0; font-weight:bold;">
+		</p>
+		<br />
+</div>
+<div class="row">
+	<div class="col-md-3">
 	</div>
-	<div class="col-md-4 text-center">
-		<ul id="sliders">
-			<li>
-				<div class="slider"></div> <span class="value">0</span>
-			</li>
-			<li>
-				<div class="slider"></div> <span class="value">0</span>
-			</li>
-			<li>
-				<div class="slider"></div> <span class="value">0</span>
-			</li>
-			<li>
-				<div class="slider"></div> <span class="value">0</span>
-			</li>
-		</ul>
-		<br /><br /><br />
+	<div class="col-md-2 text-right">
+	<strong>One</strong>
+	</div>
+	<div class="col-md-4">
+		<input type="hidden" name="sliderr1_value" id="sliderr1_value" value="0" />
 		<div id="sliderr1"></div><br /><br />
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-2 text-right">
+	<strong>Two</strong>
+	</div>
+	<div class="col-md-4">
+	<input type="hidden" name="sliderr2_value" id="sliderr2_value" value="0" />
 		<div id="sliderr2"></div><br /><br />
+	</div>
+	<div class="col-md-3">
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-3">
+	</div>
+	<div class="col-md-2 text-right">
+	<strong>Three</strong>
+	</div>
+	<div class="col-md-4">
+	<input type="hidden" name="sliderr3_value" id="sliderr3_value" value="0" />
 		<div id="sliderr3"></div><br /><br />
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 	</div>
 </div>
 <script>
@@ -132,20 +154,42 @@ function toggle_post(postId)
 	return false;
 }
 
-var sliders = $("#sliderr1 #sliderr2 #sliderr3");
+var sliders = $("#sliderr1,#sliderr2,#sliderr3");
 
 sliders.each(function() {
-	console.log($(this));	
-}
-
-$(window).load(function(){
 	
-	var value = parseInt($(this).text(), 10),
-    	availableTotal = 40;
+	//console.log($(this).find('.ui-slider-handle:first'));
+	
+    var value = parseInt($(this).text(), 10),
+        availableTotal = 400;
     
-    function repositionTooltip( e, ui ){
-        // If you're on Bootstrap 3.x change "tooltip" to "bs.tooltip"
-        // Props to fd_tl in the comments for the tip!
+	function calcTotal( e, ui ) {
+    	
+		var total = 0;
+		//console.log($(this).attr('id'));
+
+        sliders.not(this).each(function() {
+            total += $(this).slider("option", "value");
+        });    
+
+
+        var max = availableTotal - total;            
+
+        if (max - ui.value >= 0) {
+        	$("#" + $(this).attr('id') + "_value").val(ui.value)
+            total += ui.value;
+            //console.log(max-ui.value);
+            $( "#curTotal" ).val(total);
+        } else {
+            return false;
+        }
+        
+        repositionTooltip( e, ui );
+        
+    }
+    
+    function repositionTooltip( e, ui ) {
+    	
         var div = $(ui.handle).data("bs.tooltip").$tip[0];
         var pos = $.extend({}, $(ui.handle).offset(), { width: $(ui.handle).get(0).offsetWidth,
                                                         height: $(ui.handle).get(0).offsetHeight
@@ -159,13 +203,9 @@ $(window).load(function(){
         $(div).find(".tooltip-inner").text( ui.value );
     }
     
-    $("#sliderr1").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
-    $("#sliderr1 .ui-slider-handle:first").tooltip({ title: $("#sliderr1").slider("value"), trigger: "manual" }).tooltip("show");
-    $("#sliderr2").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
-    $("#sliderr2 .ui-slider-handle:first").tooltip({ title: $("#sliderr2").slider("value"), trigger: "manual" }).tooltip("show");
-    $("#sliderr3").slider({ value: 1, slide: repositionTooltip, stop: repositionTooltip, range: "min" });
-    $("#sliderr3 .ui-slider-handle:first").tooltip({ title: $("#sliderr3").slider("value"), trigger: "manual" }).tooltip("show");
-    
+    $(this).slider({ value: 1, max: 400, range: "min", slide: calcTotal, stop: repositionTooltip });
+    $(this).find('.ui-slider-handle:first').tooltip({ title: $(this).slider("value"), trigger: "manual" }).tooltip("show");
+
 });
 
 </script>
