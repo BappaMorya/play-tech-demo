@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -23,7 +22,6 @@ import play.*;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
-import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
 import play.libs.F.Function0;
@@ -45,6 +43,10 @@ public class Application extends Controller {
 			flash("error-header", errorHeader);
 		if(errorMsg != null)
 			flash("error-msg", errorMsg);
+	}
+	
+	public static final void clearError() {
+		flash().clear();
 	}
 
     public static Result index() {
@@ -194,6 +196,8 @@ public class Application extends Controller {
     
     public static Promise<Result> fbsignin() {
     	
+    	clearError();
+    	
     	Logger.debug("Invoked fbsignin");
     	
     	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
@@ -261,6 +265,9 @@ public class Application extends Controller {
     	                                		.get().map((
     	                                	            new Function<WS.Response, Result>() {
     	                            	                public Result apply(WS.Response response) {
+    	                            	                	
+    	                            	                	clearError();
+    	                            	                	
     	                            	                	Logger.debug("Check Response = " + response.getBody());
     	                            	                	JsonNode json = response.asJson();
     	                            	                	JsonNode node = json.findValue("is_valid");
