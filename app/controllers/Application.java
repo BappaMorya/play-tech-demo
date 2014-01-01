@@ -212,7 +212,7 @@ public class Application extends Controller {
     	
     	final Map<String, String> accessAttrMap = new HashMap<String, String>();
     	
-    	if(accessAttrMap.containsKey("error")) {
+    	if(attrMap.containsKey("error")) {
     		Logger.debug("Something is very wrong here!");
     		
     		result = Promise.promise(new Function0<Result>() {
@@ -223,6 +223,7 @@ public class Application extends Controller {
     		    }
 
     		});
+    		return result;
     	}
     	
     	if(attrMap.containsKey("code")) {
