@@ -53,7 +53,9 @@ public class FBManager {
     		calendar.setTime(userBirthDate);
     		calendar.set(Calendar.YEAR, curYear);
     		
-    		if(calendar.getTime().after(Calendar.getInstance().getTime()))
+    		Logger.debug("Calculated time = " + calendar.getTime());
+    		
+    		if(Calendar.getInstance().getTime().after(calendar.getTime()))
 				return true;
 		} catch (ParseException e) {
 			Logger.error("Failed to parse user birth date = " + birthDate, e);
