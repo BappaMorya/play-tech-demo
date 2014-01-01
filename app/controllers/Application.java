@@ -144,6 +144,8 @@ public class Application extends Controller {
 
     	int postCount = matchedPosts.size();
     	
+    	Logger.debug("Matched post ids = " + matchedPosts + ", size = " + postCount);
+    	
     	if(!FBManager.IS_MAGIC_MODE) {
     		postCount = FBManager.getInstance().wishThemBack(uid, likeCount, sayThanksAlotCount, sayThankYouCount, matchedPosts);
     	}

@@ -103,11 +103,13 @@ public class FBManager {
 		List<BinaryAttachment> list = new ArrayList<BinaryAttachment>();
     	List<BatchResponse> batchResponses =
     			  facebookClient.executeBatch(batchRequests, list);
+    	int counter = 1;
     	for(BatchResponse response : batchResponses) {
     		if(response.getCode() != 200) {
     			count--;
-    			Logger.error("Failed to execute request in a batch => " + response);
+    			Logger.error("Failed to execute request no " + counter + " in a batch => " + response);
     		}
+    		counter++;
     	}
     	
     	return count;
@@ -173,7 +175,7 @@ public class FBManager {
     				  if(message != null) {
     					  Matcher matcher = pattern.matcher(message);
     					  if(matcher.find()) {
-    						  Logger.debug(post.getId() + " Message (" + message + ") matches");
+    						  Logger.debug(post.getId() + " Message (" + message + ") from " + post.getFrom().getName() + " matches");
     						  BdayPost matchedPost = new BdayPost();
     						  matchedPost.friendName = post.getFrom().getName();
     						  matchedPost.postId = post.getId();
@@ -181,7 +183,7 @@ public class FBManager {
     						  matched++;
     						  matchedPostList.add(matchedPost);
     					  } else {
-    						  Logger.debug("Message (" + message + ") does not match!");
+    						  Logger.debug("Message (" + message + ") " + post.getFrom().getName() + " does not match!");
     						  BdayPost notMatchedPost = new BdayPost();
     						  notMatchedPost.friendName = post.getFrom().getName();
     						  notMatchedPost.postId = post.getId();
