@@ -180,7 +180,7 @@ public class Application extends Controller {
 				Logger.debug(key + " " + value);
 				if(notMatchedPosts.contains(key) && "true".equalsIgnoreCase(value.trim())) {
 					Logger.debug("Marking post id " + key + " as bithday post!");
-					postStore.addMatchedPost(uid, value.trim());
+					postStore.addMatchedPost(uid, key);
 				}
 			}
 			postStore.clearNotMatchedPosts(uid);

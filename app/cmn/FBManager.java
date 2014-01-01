@@ -163,8 +163,6 @@ public class FBManager {
     	Pattern pattern = Pattern.compile(patternBuilder.toString(), Pattern.CASE_INSENSITIVE);
     	
     	int total = 0;
-    	int matched = 0;
-    	int notMatched = 0;
     	
     	boolean stopNow = false;
     	for (List<Post> myFeedConnectionPage : myFeed) {
@@ -195,11 +193,10 @@ public class FBManager {
     						  notMatchedPostList.add(notMatchedPost);
     					  }
     				  }
-    				  total++;
     			  } else {
-    				  notMatched = total - matched;
+    				  total = matchedPostList.size() + notMatchedPostList.size();
     				  Logger.debug("Total = " + total + ", Matched = " 
-    						  + matched + ", Not matched = " + notMatched);
+    						  + matchedPostList.size() + ", Not matched = " + notMatchedPostList.size());
     				  Logger.debug("Next Post: " + post);
     				  stopNow = true;
     				  break;
@@ -210,9 +207,9 @@ public class FBManager {
     	}
     	
     	wrapper.setNotMatched(notMatchedPostList);
-    	wrapper.setNotMatchedCount(notMatched);
+    	wrapper.setNotMatchedCount(notMatchedPostList.size());
     	wrapper.setMatched(matchedPostList);
-    	wrapper.setMatchedCount(matched);
+    	wrapper.setMatchedCount(matchedPostList.size());
     	wrapper.setTotalCount(total);
     	wrapper.setBdayString(user.getBirthday());
 		
