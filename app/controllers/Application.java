@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -22,8 +23,10 @@ import play.*;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
+import play.libs.Akka;
 import play.libs.F.Callback;
 import play.libs.F.Callback0;
+import play.libs.F.Function0;
 import play.libs.WS;
 import play.mvc.Result;
 import static play.libs.F.Function;
@@ -208,6 +211,18 @@ public class Application extends Controller {
     	Promise<Result> result = null;
     	
     	final Map<String, String> accessAttrMap = new HashMap<String, String>();
+    	
+    	if(accessAttrMap.containsKey("error")) {
+    		Promise<Result> myPromise = Promise.promise(new Function0<Result>() {
+    		    public Result apply() throws Throwable {
+    		    	session().clear();
+    	    		addError("Wow, what did just happen ?", "Looks like you don't want to thank for birthday wishes!");
+    	    		return ok(home.render());
+    		    }
+
+    		});
+    		return myPromise;
+    	}
     	
     	if(attrMap.containsKey("code")) {
     		Logger.debug("Received code = " + attrMap.get("code"));
