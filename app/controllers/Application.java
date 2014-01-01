@@ -303,8 +303,13 @@ public class Application extends Controller {
     	                            	                				}
     	                            	                				session("uid", user.userId);
     	                            	                				session("userName", user.userName);
-    	                            	                				return ok(userposts.render(wrapper.getNotMatched(), user, 
-    	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
+    	                            	                				
+    	                            	                				if(wrapper.getNotMatched() != null && wrapper.getNotMatched().size() > 0) {
+    	                            	                					return ok(userposts.render(wrapper.getNotMatched(), user, 
+        	                            	                						wrapper.getTotalCount(), wrapper.getNotMatchedCount()));
+    	                            	                				} else {
+    	                            	                					return ok(postdistrib.render(session("userName"), wrapper.getMatched().size()));
+    	                            	                				}
     	                            	                			} else {
     	                            	                				// Not all permissions received
     	                            	                				session().remove("uid");
