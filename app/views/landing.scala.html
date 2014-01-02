@@ -83,7 +83,7 @@
 	</div>
 	<div class="col-md-4 text-center">
 		 <div class="form-actions"">
-		 	<button type="submit" class="btn btn-primary active text-center">Next</button>
+		 	<button type="submit" id="submitButton" class="btn btn-primary active text-center">Next</button>
 		 </div>		
 	</div>
 	<div class="col-md-4">
@@ -138,6 +138,12 @@
 	</div>
 </div>
 <script>
+
+$('#submitButton').on('click', function (e) {
+	console.log("I've arrived!");
+	return false;
+});
+
 function toggle_post(postId)
 {
 	var h = document.getElementById(postId);
