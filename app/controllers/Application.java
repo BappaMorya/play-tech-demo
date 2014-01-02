@@ -256,6 +256,7 @@ public class Application extends Controller {
     				.setQueryParameter("code", attrMap.get("code")).get().flatMap(
     	            new Function<WS.Response, Promise<Result>>() {
     	                public Promise<Result> apply(WS.Response response) {
+    	                	flash().clear();
     	                	Logger.debug("Outer Response = " + response.getBody());
     	                	String[] tokens = response.getBody().split("&");
     	                	for(String token : tokens) {
@@ -269,6 +270,7 @@ public class Application extends Controller {
     	                    		.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     	                    		.get().flatMap(
     	                            new Function<WS.Response, Promise<Result>>() {
+    	                            	flash().clear();
     	                                public Promise<Result> apply(WS.Response response) {
     	                                	Logger.debug("Inner Response = " + response.getBody());
     	                                	String appAccessToken = response.getBody().split("=")[1];
@@ -283,6 +285,7 @@ public class Application extends Controller {
     	                            	                public Result apply(WS.Response response) {
     	                            	                	
     	                            	                	clearError();
+    	                            	                	flash().clear();
     	                            	                	
     	                            	                	Logger.debug("Check Response = " + response.getBody());
     	                            	                	JsonNode json = response.asJson();
@@ -396,6 +399,7 @@ public class Application extends Controller {
     }
     
     public static Result home() {
+    	flash().clear();
     	return ok(home.render());
     }
     
