@@ -59,6 +59,7 @@ public class Application extends Controller {
     }
     
     public static Result clearsession() {
+    	flash().clear();
     	String uid = session("uid");
     	
     	if(uid != null) {
@@ -68,6 +69,8 @@ public class Application extends Controller {
         	UserPostStore.getInstance().removeUser(uid);
         	Logger.debug("After clearing session, uid = " + session("uid"));
     	}
+    	
+    	session().clear();
     	
     	return ok(home.render());
     }
@@ -133,6 +136,8 @@ public class Application extends Controller {
     	
     	if(!postData.containsKey("sliderr1_value") || !postData.containsKey("sliderr2_value") || !postData.containsKey("sliderr3_value")) {
     		session().clear();
+        	AccessTokenCache.getInstance().removeToken(uid);
+        	UserPostStore.getInstance().removeUser(uid);
     		addError("Something fishy going on here!", "Seems like request you sent was incomplete!");
     		return ok(home.render());
     	}
