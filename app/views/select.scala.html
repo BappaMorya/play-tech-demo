@@ -9,19 +9,23 @@
 	<ul>
 		@for(record <- records) {
 			<li>@record.data
-			@form(routes.Application.delrecord(record.id)) {
+			<!-- 
+			at_form(routes.Application.delrecord(record.id)) {
 				<input type="submit" value="Delete">
 			}
+			 -->
 			</li>
 		}
 	</ul>
 	
 	<h2>Add new record</h2>
 	
-	@form(routes.Application.newRecord()) {
+	<!-- 
+	at_form(routes.Application.newRecord()) {
 	
 		@inputText(recordForm("data"))
 		<input type="Submit" value="Create">
 	}
+	 -->
 
 }

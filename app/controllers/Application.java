@@ -72,28 +72,28 @@ public class Application extends Controller {
     	return ok(home.render());
     }
     
-    public static Result pappu() {
-    	return ok("Hello there buoy!");
-    }
-    
-    public static Result record() {
-    	return ok(views.html.record.render(Record.all(), recordForm));
-    }
-    
-    public static Result newRecord() {
-    	Form<Record> filledForm = recordForm.bindFromRequest();
-    	if(filledForm.hasErrors()) {
-    		return badRequest(record.render(Record.all(), filledForm));
-    	} else {
-    		Record.create(filledForm.get());
-    		return redirect(routes.Application.record());
-    	}
-    }
-    
-    public static Result delrecord(Long id) {
-    	RecordStore.deleteRecord(id);
-    	return redirect(routes.Application.record());
-    }
+//    public static Result pappu() {
+//    	return ok("Hello there buoy!");
+//    }
+//    
+//    public static Result record() {
+//    	return ok(views.html.record.render(Record.all(), recordForm));
+//    }
+//    
+//    public static Result newRecord() {
+//    	Form<Record> filledForm = recordForm.bindFromRequest();
+//    	if(filledForm.hasErrors()) {
+//    		return badRequest(record.render(Record.all(), filledForm));
+//    	} else {
+//    		Record.create(filledForm.get());
+//    		return redirect(routes.Application.record());
+//    	}
+//    }
+//    
+//    public static Result delrecord(Long id) {
+//    	RecordStore.deleteRecord(id);
+//    	return redirect(routes.Application.record());
+//    }
     
     public static Result signin() {
     	final Set<Map.Entry<String,String[]>> entries = request().queryString().entrySet();
