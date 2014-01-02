@@ -270,8 +270,8 @@ public class Application extends Controller {
     	                    		.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     	                    		.get().flatMap(
     	                            new Function<WS.Response, Promise<Result>>() {
-    	                            	flash().clear();
     	                                public Promise<Result> apply(WS.Response response) {
+    	                                	flash().clear();
     	                                	Logger.debug("Inner Response = " + response.getBody());
     	                                	String appAccessToken = response.getBody().split("=")[1];
     	                                	accessAttrMap.put("app_access_token", appAccessToken);
