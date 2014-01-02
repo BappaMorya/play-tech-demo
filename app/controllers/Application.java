@@ -34,6 +34,10 @@ public class Application extends Controller {
 	
 	private static Form<Record> recordForm = Form.form(Record.class);
 	
+	private static String APP_ID = System.getenv("APP_ID");
+	
+	private static String APP_SECRET = System.getenv("APP_SECRET");
+	
 	public static final void addError(String errorHeader, String errorMsg) {
 		if(errorHeader == null && errorMsg == null) {
 			return;
@@ -234,9 +238,9 @@ public class Application extends Controller {
     		Logger.debug("Received code = " + attrMap.get("code"));
     		
     		result = WS.url("https://graph.facebook.com/oauth/access_token")
-    				.setQueryParameter("client_id", "169640416559253")
+    				.setQueryParameter("client_id", APP_ID)
     				.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
-    				.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
+    				.setQueryParameter("client_secret", APP_SECRET)
     				.setQueryParameter("code", attrMap.get("code")).get().flatMap(
     	            new Function<WS.Response, Promise<Result>>() {
     	                public Promise<Result> apply(WS.Response response) {
@@ -247,8 +251,8 @@ public class Application extends Controller {
     	                		accessAttrMap.put(nvp[0], nvp[1]);
     	                	}
     	                    return WS.url("https://graph.facebook.com/oauth/access_token")
-    	                    		.setQueryParameter("client_id", "169640416559253")
-    	                    		.setQueryParameter("client_secret", "490f2388bb03e22ae33366fa64c9dbf5")
+    	                    		.setQueryParameter("client_id", APP_ID)
+    	                    		.setQueryParameter("client_secret", APP_SECRET)
     	                    		.setQueryParameter("grant_type", "client_credentials")
     	                    		.setQueryParameter("redirect_uri", Play.application().configuration().getString("app_redirect_uri"))
     	                    		.get().flatMap(
