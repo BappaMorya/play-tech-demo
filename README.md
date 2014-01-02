@@ -27,6 +27,7 @@ If application fails to detect some posts as birthday wishes, it asks User to id
 * Thank by Like to a post
 * Thank by replying "Thanks a lot"
 * Thank by replying "Thank you"
+
 ### Stage 3
 Now that application knows distribution if replies, all left to do is actually make calls to Facebook graph API. Internally, application uses bulk APIs to achieve this. After all posts are "ThankBack'ed", application gives up permission acquired from user to use his Facebook account.
 
