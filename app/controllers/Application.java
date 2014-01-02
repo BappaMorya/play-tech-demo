@@ -341,6 +341,17 @@ public class Application extends Controller {
     	                            	                				}
     	                            	                				
     	                            	                				PostDataWrapper wrapper = FBManager.getInstance().findNonBirthdayPosts(userIdNode.asText());
+    	                            	                				
+    	                            	                				// Check if posts are available for replying back
+    	                            	                				if(wrapper.getMatchedCount() < 1 && wrapper.getNotMatchedCount() < 1) {
+    	                            	                					session().clear();
+    	                            	                					flash().clear();
+    	                            	                					tokenCache.removeToken(user.getUserId());
+        	    	                            	                		addError("No birthday wishes found", "It seems like all your available birthday wishes have been Thankback'ed!");
+        	    	                            	                		return ok(home.render());
+    	                            	                				}
+    	                            	                				
+    	                            	                				// Populate post store
     	                            	                				UserPostStore postStore = UserPostStore.getInstance();
     	                            	                				if(wrapper.getMatched() != null && wrapper.getMatched().size() > 0) {
     	                            	                					for(BdayPost post : wrapper.getMatched()) {

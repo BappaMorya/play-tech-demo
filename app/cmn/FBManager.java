@@ -22,9 +22,13 @@ import com.restfb.batch.BatchRequest;
 import com.restfb.batch.BatchRequest.BatchRequestBuilder;
 import com.restfb.batch.BatchResponse;
 import com.restfb.json.JsonObject;
+import com.restfb.types.Comment;
 import com.restfb.types.FacebookType;
+import com.restfb.types.NamedFacebookType;
 import com.restfb.types.Photo;
 import com.restfb.types.Post;
+import com.restfb.types.Post.Comments;
+import com.restfb.types.Post.Likes;
 import com.restfb.types.User;
 
 public class FBManager {
@@ -167,6 +171,34 @@ public class FBManager {
     	boolean stopNow = false;
     	for (List<Post> myFeedConnectionPage : myFeed) {
     		  for (Post post : myFeedConnectionPage) {
+    			  
+    			  // If post is already acknowledged, skip it
+    			  Comments coms = post.getComments();
+    			  Likes likes = post.getLikes();
+    			  if(coms != null && coms.getData() != null) {
+    				  boolean skip = false;
+    				  for(Comment comment : coms.getData()) {
+    					  if(comment.getFrom().getId().equals("100006430168511")) {
+    						  skip = true;
+    						  break;
+    					  }
+    				  }
+    				  if(skip)
+    					  continue;
+    			  }
+    			  
+    			  if(likes != null && likes.getData() != null) {
+    				  boolean skip = false;
+    				  for(NamedFacebookType like : likes.getData()) {
+    					  if(like.getId().equals("100006430168511")) {
+    						  skip = true;
+    						  break;
+    					  }
+    				  }
+    				  if(skip)
+    					  continue;
+    			  }
+    			  
     			  Date createdTimeDate = post.getCreatedTime();
     			  if(createdTimeDate.after(beforeBirthDate)) {
     				  String message = post.getMessage();
