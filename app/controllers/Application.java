@@ -59,9 +59,16 @@ public class Application extends Controller {
     }
     
     public static Result clearsession() {
-    	Logger.debug("Clearing session for uid = " + session("uid"));
-    	session().remove("uid");
-    	Logger.debug("After clearing session, uid = " + session("uid"));
+    	String uid = session("uid");
+    	
+    	if(uid != null) {
+    		Logger.debug("Clearing session for uid = " + uid);
+    		session().clear();
+        	AccessTokenCache.getInstance().removeToken(uid);
+        	UserPostStore.getInstance().removeUser(uid);
+        	Logger.debug("After clearing session, uid = " + session("uid"));
+    	}
+    	
     	return ok(home.render());
     }
     
