@@ -15,7 +15,7 @@ In case you need to clear your session use [this url](http://play-tech-demo.hero
 
 What it does
 ------------
-Mail goal of this project if to demonstrate use of various technologies to solve a problem whcih in this case would be "Acknowledging Facebook birthday wishes".
+Main goal of this project if to demonstrate use of various technologies to solve a problem which in this case would be "Acknowledging Facebook birthday wishes".
 
 Following are different stages application goes through-
 
@@ -34,4 +34,4 @@ Posts which were already acknowledged by either like'ing it or replying to it ar
 
 Deployment
 -----------
-Heroku is used as a PaaS vendor to deplo this application. Heroku config variables are used to configure and use App ID and App Secret for Facebook application.
+Heroku is used as a PaaS vendor to deploy this application. Heroku config variables are used to configure and use App ID and App Secret for Facebook application.
