@@ -75,9 +75,9 @@
 </form>
 <script>
 $('#submitButton').on('click', function (e) {
-	var likeCount = parseInt($("#sliderr1_value").val();
-	var thanksALotCount = parseInt($("#sliderr2_value").val();
-	var thankYouCount = parseInt($("#sliderr3_value").val();
+	var likeCount = parseInt($("#sliderr1_value").val());
+	var thanksALotCount = parseInt($("#sliderr2_value").val());
+	var thankYouCount = parseInt($("#sliderr3_value").val());
 	console.log("Likes = " + likeCount + ", Thanks a Lot = " + thanksALotCount + ", Thank you = " + thankYouCount);
 	if(likeCount + thanksALotCount + thankYouCount < @totalCount) {
 		alert("Please make sure you have distributed all @totalCount posts!");
