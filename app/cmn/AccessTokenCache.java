@@ -24,7 +24,7 @@ public class AccessTokenCache {
 			cacheTimeout = 10;
 		}
 		
-		Logger.debug("Creating cache with timeout = " + cacheTimeout + " seconds");
+		Logger.debug("Creating cache with timeout = " + cacheTimeout + " minutes");
 		
 		RemovalListener<String, String> listener = new RemovalListener<String, String>() {
 			
