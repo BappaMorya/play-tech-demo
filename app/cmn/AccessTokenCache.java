@@ -14,7 +14,7 @@ public class AccessTokenCache {
 	
 	private static final AccessTokenCache instance = new AccessTokenCache();
 	
-	private static Cache<String, String> tokenCache = null;
+	private Cache<String, String> tokenCache = null;
 	
 	private AccessTokenCache() {
 		long cacheTimeout = 0L;
@@ -23,6 +23,8 @@ public class AccessTokenCache {
 		} catch (NumberFormatException nfe) {
 			cacheTimeout = 10;
 		}
+		
+		Logger.debug("Creating cache with timeout = " + cacheTimeout + " seconds");
 		
 		RemovalListener<String, String> listener = new RemovalListener<String, String>() {
 			
@@ -37,6 +39,8 @@ public class AccessTokenCache {
 				.expireAfterWrite(cacheTimeout, TimeUnit.MINUTES)
 				.removalListener(listener)
 				.build();
+		
+		Logger.debug("Created cache ? " + (tokenCache != null));
 	}
 	
 	public static final AccessTokenCache getInstance() {
