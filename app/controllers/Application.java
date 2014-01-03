@@ -134,6 +134,13 @@ public class Application extends Controller {
     	UserPostStore postStore = UserPostStore.getInstance();
     	List<String> matchedPosts = postStore.getMatchedPosts(uid);
     	
+    	if(matchedPosts == null) {
+    		// Probably got evicted from cache!
+    		session().clear();
+    		addError("Your session has timed out!", null);
+    		return ok(home.render());
+    	}
+    	
     	if(!postData.containsKey("sliderr1_value") || !postData.containsKey("sliderr2_value") || !postData.containsKey("sliderr3_value")) {
     		session().clear();
         	AccessTokenCache.getInstance().removeToken(uid);
@@ -193,6 +200,13 @@ public class Application extends Controller {
     	Logger.debug("Post Data keys = " + postData.keySet());
     	UserPostStore postStore = UserPostStore.getInstance();
     	List<String> notMatchedPosts = postStore.getNotMatchedPosts(uid);
+    	
+    	if(notMatchedPosts == null) {
+    		// Probably got evicted from cache!
+    		session().clear();
+    		addError("Your session has timed out!", null);
+    		return ok(home.render());
+    	}
     	
 		if (notMatchedPosts != null) {
 			for (Map.Entry<String, String[]> entry : postData.entrySet()) {
