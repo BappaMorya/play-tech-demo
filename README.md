@@ -5,6 +5,7 @@ Play framework demo app using:
 
 * Play Framework - Uses Play for Java, web services, flash and session scopes
 * Social Integration using Rest FB - To interact with FB graph APIs
+* Guava Library - Cache for soft timeout of session through access token expiry
 * Heroku - Deployement of app
 * Jquery UI - For sliders
 * Bootstrap - Basic out of box UI
